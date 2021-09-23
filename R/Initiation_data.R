@@ -1,5 +1,8 @@
-# data: operator set
+#### data: operator set
 oper_set <- read.csv(file="./data/cpmr_test.csv", header=FALSE)
+#### Skill
+skill <- "Novice"
+# skill <- "Expert"
 
 # data frame: working memory
 a<-c()
@@ -21,14 +24,22 @@ wm_Box <- rbind(wm_Box, c(0, 0, 0, 0, 0, 0, 0, 0))
 wm_Box <- rbind(wm_Box, c(0, 0, 0, 0, 0, 0, 0, 0))
 wm_Box <- rbind(wm_Box, c(0, 0, 0, 0, 0, 0, 0, 0))
 
-colnames(wm_Box)[1]<-"chunk_num"
-colnames(wm_Box)[2]<-"chunk_name"
-colnames(wm_Box)[3]<-"stack_depth"
-colnames(wm_Box)[4]<-"pushed_time(Global)"
-colnames(wm_Box)[5]<-"elapsed_time(Local)"
-colnames(wm_Box)[6]<-"rehearsal"
-colnames(wm_Box)[7]<-"activation"
-colnames(wm_Box)[8]<-"prob_recall"
+# colnames(wm_Box)[1]<-"chunk_num"
+# colnames(wm_Box)[2]<-"chunk_name"
+# colnames(wm_Box)[3]<-"stack_depth"
+# colnames(wm_Box)[4]<-"pushed_time(Global)"
+# colnames(wm_Box)[5]<-"elapsed_time(Local)"
+# colnames(wm_Box)[6]<-"rehearsal"
+# colnames(wm_Box)[7]<-"activation"
+# colnames(wm_Box)[8]<-"prob_recall"
+colnames(wm_Box)[1]<-"Chunk_Number"
+colnames(wm_Box)[2]<-"Chunk_Name"
+colnames(wm_Box)[3]<-"Stack_Depth"
+colnames(wm_Box)[4]<-"Chunk_Arrival_Time"
+colnames(wm_Box)[5]<-"Chunk_Elapsed_Time"
+colnames(wm_Box)[6]<-"Rehearsal"
+colnames(wm_Box)[7]<-"Activation"
+colnames(wm_Box)[8]<-"Probability_of_Recall"
 wm_Box
 
 # data frame: chunk lifecyle

@@ -4,10 +4,12 @@
 \alias{RunMain}
 \title{RunMain()}
 \usage{
-RunMain(scenario)
+RunMain(scenario, skill)
 }
 \arguments{
-\item{scenario}{Scenario}
+\item{scenario}{Scenario in CSV format}
+
+\item{skill}{Novice or Expert}
 }
 \value{
 
@@ -16,5 +18,5 @@ RunMain(scenario)
 Run main function
 }
 \examples{
-RunMain(scenario)
+RunMain(csv file, "Novice")
 }

@@ -1,0 +1,35 @@
+Name,Definition,Reference,Task Completion Time (milliseconds)
+Look,Look at an item at a known position,"Kieras, 1997; John & Gray, 1995; Estes, 2017",550
+Proofread,Time to carefully count labelled words,,330
+Read,Time to read a single word,"Kieras, 1997; Estes, 2017",260
+Search,Search for an item at an unknown position,"Kieras, 1997; Estes, 2017",1250
+Saccade,A single rapid eye movement,"Card et al., 1986",230
+Hear,Listen to someone speaking. Label should be the text of the speech,"Kieras, 1997; John & Gray, 1995; Estes, 2017",400
+Attend,Shifting of attention to stimuli,"John & Gray, 1995; Estes, 2017",50
+Initiate,Initiate motor process,"John & Gray, 1995; Estes, 2017",50
+Ignore,Removes item from working memory,"Kieras, 1997; John & Gray, 1995; Estes, 2017",50
+Mental,Generic operator for thinking,"Card et al., 1980",1350
+Recall,Retreive information from long term memory or working memory,"Kieras, 1997; John & Gray, 1995; Estes, 2017",550
+Store,Place item in working memory,"Kieras, 1997; John & Gray, 1995; Estes, 2017",50
+Think,Generic operator for thinking,"Kieras, 1997; John & Gray, 1995; Estes, 2017",1250
+Verify,Generic operator for thinking,"Kieras, 1997; John & Gray, 1995; Estes, 2017",1250
+Click,Press of a mouse button,"Kieras, 1997; John & Gray, 1995; Estes, 2017",320
+Drag,"Drag an item across a screen, associated with touchscreen devices","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",546
+Grasp,Act of reaching with the hand and grasping an object,"Kieras, 1997; Estes, 2017",750
+Hands,Move hands to position,"Kieras, 1997; John & Gray, 1995; Estes, 2017",450
+Keystroke,Press a single keyboard key,"Kieras, 1997; John & Gray, 1995; Estes, 2017",280
+Point,Move cursor via mouse,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",340
+Swipe,One swipe gesture,"Kieras, 1997; Estes, 2017",170
+Tap,Touch a series of virtual buttons,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",179
+Touch,Press a virtual button,"Kieras, 1997; Estes, 2017",490
+Turn,One turn of a knob or dial,"Kieras, 1997; Estes, 2017",800
+Type,Press a series of keyboad keys,"Kieras, 1997; John & Gray, 1995; Estes, 2017",280
+Write,Time to write a single word (handwriting),"Kieras, 1997; Estes, 2017",2000
+Say,Speech. Label should be the text of speech,"Kieras, 1997; John & Gray, 1995; Estes, 2017",400
+Wait,User waiting for system. Modify time by adding x seconds at end of line,"Kieras, 1997; John & Gray, 1995; Estes, 2017",1000
+Reach,Move a hand to a display,"Maynard et al., 1948",234
+Flick,Flick a screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",298.5
+double_Tap,Double tap a screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",358
+Zoomin,Zoom in on the screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506
+Zoomout,Zoom out from the screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506
+Point_Finger,Point finger at the screen,,340

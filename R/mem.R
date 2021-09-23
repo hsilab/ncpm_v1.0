@@ -117,9 +117,9 @@ ExtChunk <- function (line_of_input, oper, time_current, time_past, wm_Box, oper
 
       # check if the candidate is new or old(same)
       for (i in 1:nrow(wm_Box)) {
-        if ( (wm_Box$chunk_name[i] != candidate_chunk) && (wm_Box$chunk_name[i] != 0) )
+        if ( (wm_Box$Chunk_Name[i] != candidate_chunk) && (wm_Box$Chunk_Name[i] != 0) )
           other_chunk_counter <- other_chunk_counter + 1
-        else if (wm_Box$chunk_name[i] == 0)
+        else if (wm_Box$Chunk_Name[i] == 0)
           empty_chunk_counter <- empty_chunk_counter + 1
         else
           same_chunk_counter <- same_chunk_counter + 1
@@ -199,7 +199,7 @@ PushChunk <- function (new_chunk, wm_Box, time_current, oper, oper_Time, num_of_
     assgined_Chunk_Num = 7 - count_zero + 1
 
   wm_Box[assgined_Chunk_Num, 2] <- new_chunk # chunk_name
-  wm_Box[assgined_Chunk_Num, 3] <- GetStackDepth(wm_Box$chunk_name) # stack_depth
+  wm_Box[assgined_Chunk_Num, 3] <- GetStackDepth(wm_Box$Chunk_Name) # stack_depth
   wm_Box[assgined_Chunk_Num, 4] <- time_current # pushed_time (FIXED)
   wm_Box[assgined_Chunk_Num, 5] <- (time_current + 50) -  wm_Box[assgined_Chunk_Num, 4]  # elapsed_time (NOT FIXED)
   wm_Box[assgined_Chunk_Num, 6] <- GetRehearsal(oper, wm_Box[assgined_Chunk_Num, 2], wm_Box[assgined_Chunk_Num, 6], 0, new_chunk) # rehearsal
@@ -324,14 +324,14 @@ UpdateChunk <- function (candidate_chunk, oper_name, time_current, wm_Box, same_
 
   for (i in 1:nrow(wm_Box)) {
     # Update for the other chunks
-    if ( (wm_Box$chunk_name[i] != candidate_chunk) && (wm_Box$chunk_name[i] != 0) && (time_current != wm_Box$pushed_time.Global.[i])) {
+    if ( (wm_Box$Chunk_Name[i] != candidate_chunk) && (wm_Box$Chunk_Name[i] != 0) && (time_current != wm_Box$Chunk_Arrival_Time[i])) {
       # wm_Box[i, 5] <- time_current - wm_Box[i, 4] - 50
       wm_Box[i, 5] <- time_current - wm_Box[i, 4]
       wm_Box[i, 7] <- GetActivation(wm_Box[i, 3], wm_Box[i, 5], wm_Box[i, 6]) # activation update
       wm_Box[i, 8] <- GetProbRecall(wm_Box[i, 7]) # prob_recall update
     }
     # Rehearsal : Update for the same chunk except for the first push
-    else if ( (wm_Box$chunk_name[i] == candidate_chunk) && (same_chunk_counter != 0) ) {
+    else if ( (wm_Box$Chunk_Name[i] == candidate_chunk) && (same_chunk_counter != 0) ) {
       # wm_Box[i, 5] <- time_current - wm_Box[i, 4] - 50
       wm_Box[i, 5] <- time_current - wm_Box[i, 4]
       updated_rehearsal <- GetRehearsal(oper_name, candidate_chunk, wm_Box[i, 6], same_chunk_counter, candidate_chunk)
@@ -465,31 +465,32 @@ GetProbRecall <- function (m_value) {
 #' GetNumOper()
 #'
 #' @description Return the number of operators (Calculate repetition for novices)
+#'
 #' @param oper_Name Operator name
 #' @param num_Oper Number of operators
 #' @param oper_Time Operator time (duration)
+#' @param skill Novice or Expert
 #'
 #' @return Number of operator
 #' @export
 #'
 #' @examples
-#' GetNumOper(oper_Name, num_Oper, oper_Time)
-GetNumOper <- function (oper_Name, num_Oper, oper_Time) {
-  # N-CPM : This "Look" is for counting perceptual operators for Novice Vision
-  if (oper_Name == "Look") {
-    total_P <- oper_Time/550
-    num_Oper$Perceptual <- num_Oper$Perceptual + total_P
+#' GetNumOper(oper_Name, num_Oper, oper_Time, skill)
+GetNumOper <- function (oper_Name, num_Oper, oper_Time, skill) {
+  for (i in 1:nrow(oper_set)) {
+    if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") && (skill == "Novice") ) {
+      total_P <- oper_Time/oper_set[i,3]
+      num_Oper$Perceptual <- num_Oper$Perceptual + total_P
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") )
+      num_Oper$Perceptual <- num_Oper$Perceptual + 1
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "cognitive") )
+      num_Oper$Congitive <- num_Oper$Congitive + 1
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "hands") )
+      num_Oper$Motor <- num_Oper$Motor + 1
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "Foot") )
+      num_Oper$Motor <- num_Oper$Motor + 1
   }
-  else if (oper_Name == "Search") {
-    total_P <- oper_Time/1250
-    num_Oper$Perceptual <- num_Oper$Perceptual + total_P
-  }
-  else if (oper_Name == "Read" | oper_Name == "Saccade")
-    num_Oper$Perceptual <- num_Oper$Perceptual + 1
-  else if (oper_Name == "Attend" | oper_Name == "Recall" | oper_Name == "Store" | oper_Name == "Think" | oper_Name == "Verify")
-    num_Oper$Congitive <- num_Oper$Congitive + 1
-  else if (oper_Name == "Reach" | oper_Name == "Move_MTM" | oper_Name == "Flexion" | oper_Name == "Extension" | oper_Name == "Grasp" | oper_Name == "Touch" | oper_Name == "Point")
-    num_Oper$Motor <- num_Oper$Motor + 1
   return(num_Oper)
 }
 

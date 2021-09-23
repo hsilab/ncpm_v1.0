@@ -4,12 +4,16 @@
 \alias{RetrievingOperTime}
 \title{RetrievingOperTime()}
 \usage{
-RetrievingOperTime(oper, k, scenario)
+RetrievingOperTime(oper, k, scenario, skill)
 }
 \arguments{
 \item{oper}{operator name}
 
 \item{k}{line number}
+
+\item{scenario}{Scenario in CSV format}
+
+\item{skill}{Novice or Expert}
 }
 \value{
 operator time for an operator
@@ -18,5 +22,5 @@ operator time for an operator
 Retrieving the operator time
 }
 \examples{
-RetrievingOperTime(operator name, line number)
+RetrievingOperTime(operator name, line number, scenario, skill)
 }

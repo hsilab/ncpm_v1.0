@@ -10,8 +10,9 @@
 #' ExtOper(line_of_input)
 ExtOper <- function(line_of_input) {
   oper_raw<-strsplit(line_of_input, " ")
-  mat <- matrix(unlist(oper_raw), ncol=1, byrow=TRUE)
 
+  # dot_counter is not needed for Scenario Development tab
+  mat <- matrix(unlist(oper_raw), ncol=1, byrow=TRUE)
   dot_counter <- 0
   for (i in 1:nchar(mat[1,1])) {
     c <- substr(mat[1,1], i, i)
@@ -20,8 +21,16 @@ ExtOper <- function(line_of_input) {
   }
   dot_counter
 
-  oper<-substr(mat[1,1], dot_counter+1, nchar(mat[1,1]))
-  return(oper)
+  if (dot_counter > 0) {
+    # for Cogulator generated code - Starting with a dot for every row
+    oper<-substr(mat[1,1], dot_counter + 1, nchar(mat[1,1]))
+
+    return(oper)
+  } else {
+    # for Scenario Development tab - NO DOT at the beginning of the code
+
+    return(oper_raw[[1]][3])
+  }
 }
 
 
@@ -47,15 +56,18 @@ RetrOpTime_Motor <- function (oper, k) {
 #' RetrievingOperTime()
 #'
 #' @description Retrieving the operator time
+#'
 #' @param oper operator name
 #' @param k line number
+#' @param scenario Scenario in CSV format
+#' @param skill Novice or Expert
 #'
 #' @return operator time for an operator
 #' @export
 #'
 #' @examples
-#' RetrievingOperTime(operator name, line number)
-RetrievingOperTime <- function (oper, k, scenario) {
+#' RetrievingOperTime(operator name, line number, scenario, skill)
+RetrievingOperTime <- function (oper, k, scenario, skill) {
   oper_set_line <- nrow(oper_set)
 
   # bring operator time from the database
@@ -66,7 +78,7 @@ RetrievingOperTime <- function (oper, k, scenario) {
   }
 
   # N-CPM : Novice Vision
-  if (oper == "Look" | oper == "Search") {
+  if ( (oper == "Look" | oper == "Search") && (skill == "Novice") ) {
     repetition <- sample(1:3, size=1) # Novice look & searching pattern
     for (i in 1:oper_set_line) {
       if (oper == oper_set[i, 2])
@@ -75,25 +87,35 @@ RetrievingOperTime <- function (oper, k, scenario) {
     matched_Time <- repetition * matched_Time
   }
 
-  # N-CPM : Novice Motor (including experts)
-  if (oper == "Touch") {
+  # N-CPM : Novice Motor
+  if ( (oper == "Touch") && (skill == "Novice") ) {
     RT <- 0 # Hick-Hyman law (Hick, 1952)
     MT <- 0 # Fitts' law (Fitts, 1954)
     nov_Chunk <- 1.9 # (Chase & Simon, 1973)
-    exp_Chunk <- 2.5 # (Chase & Simon, 1973)
+
     nov_dat_display <- 10 # number of items in the display for novices (all items)
-    exp_dat_display <- 2 # number of items in the display for experts (only essential information
+
     icon_width <- 3
     icon_distance <- 30
 
     RT_nov <- 1/nov_Chunk * log2(nov_dat_display)
-    RT_exp <- 1/exp_Chunk * log2(exp_dat_display)
-
     MT_nov <- 1/nov_Chunk * log2(2*nov_dat_display/icon_width) * 1000 # millisecond
-    MT_exp <- 1/exp_Chunk * log2(2*nov_dat_display/icon_width) * 1000 # millisecond
 
     matched_Time <- RT_nov + MT_nov # for novices
-    # matched_Time <- RT_exp + MT_exp # for experts
+  } else if ( (oper == "Touch") && (skill == "Expert") ) {
+    # N-CPM : Expert Motor
+    RT <- 0 # Hick-Hyman law (Hick, 1952)
+    MT <- 0 # Fitts' law (Fitts, 1954)
+    exp_Chunk <- 2.5 # (Chase & Simon, 1973)
+
+    exp_dat_display <- 2 # number of items in the display for experts (only essential information
+    icon_width <- 3
+    icon_distance <- 30
+
+    RT_exp <- 1/exp_Chunk * log2(exp_dat_display)
+    MT_exp <- 1/exp_Chunk * log2(2*exp_dat_display/icon_width) * 1000 # millisecond
+
+    matched_Time <- RT_exp + MT_exp # for experts
   }
 
   # calculation time for hearing and saying : each word is 400 ms
@@ -101,6 +123,16 @@ RetrievingOperTime <- function (oper, k, scenario) {
     num_Words <- strsplit(scenario[k, 1], " ")
     num_Words <- length(num_Words[[1]]) - 1
     matched_Time <- num_Words * 400
+  } else if (oper == "Type") {
+    dot_counter <- 0
+    for (i in 1:nchar(scenario[k,1])) {
+      c <- substr(scenario[k,1], i, i)
+      if (c == ".")
+        dot_counter <- dot_counter + 1
+    }
+    dot_counter
+    # 280=average type speed, 4 = number of characters in "type"
+    matched_Time <- (nchar(scenario[k,1]) - 4 - dot_counter) * 280
   }
   return(matched_Time)
 }

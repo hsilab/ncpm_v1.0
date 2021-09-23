@@ -4,7 +4,7 @@
 \alias{GetNumOper}
 \title{GetNumOper()}
 \usage{
-GetNumOper(oper_Name, num_Oper, oper_Time)
+GetNumOper(oper_Name, num_Oper, oper_Time, skill)
 }
 \arguments{
 \item{oper_Name}{Operator name}
@@ -12,6 +12,8 @@ GetNumOper(oper_Name, num_Oper, oper_Time)
 \item{num_Oper}{Number of operators}
 
 \item{oper_Time}{Operator time (duration)}
+
+\item{skill}{Novice or Expert}
 }
 \value{
 Number of operator
@@ -20,5 +22,5 @@ Number of operator
 Return the number of operators (Calculate repetition for novices)
 }
 \examples{
-GetNumOper(oper_Name, num_Oper, oper_Time)
+GetNumOper(oper_Name, num_Oper, oper_Time, skill)
 }

@@ -1,14 +1,16 @@
 #' RunMain()
 #'
 #' @description Run main function
-#' @param scenario Scenario
+#'
+#' @param scenario Scenario in CSV format
+#' @param skill Novice or Expert
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' RunMain(scenario)
-RunMain <- function(scenario) {
+#' RunMain(csv file, "Novice")
+RunMain <- function(scenario, skill) {
   Reseted <- ResetAll()
   wm_Box <- Reseted[[1]]
   chunk_Lifecyle <- Reseted[[2]]
@@ -18,7 +20,7 @@ RunMain <- function(scenario) {
 
   for (i in 2:nrow(scenario)) {
     oper_Name <- ExtOper(scenario[i, 1])
-    oper_Time <- RetrievingOperTime(oper_Name, i, scenario)
+    oper_Time <- RetrievingOperTime(oper_Name, i, scenario, skill)
     acc_Time_1 <- acc_Time_1 + as.numeric(oper_Time)
 
     num_of_chunks <- MultipleChunks(oper_Time, oper_Name, scenario[i, 1])
@@ -27,14 +29,14 @@ RunMain <- function(scenario) {
     chunk_Lifecyle <- chunk_process[[2]]
     acc_Time_2 <- acc_Time_1
 
-    num_Oper <- GetNumOper(oper_Name, num_Oper, oper_Time)
+    num_Oper <- GetNumOper(oper_Name, num_Oper, oper_Time, skill)
   }
 
-  TCT <- acc_Time_1/1000
+  TCT <- round(acc_Time_1/1000, 2)
 
   MC <- GetMemoryChunk(chunk_Lifecyle, acc_Time_1)
 
-  final_R <- list(wm_Box, TCT, MC[[1]], MC[[2]], num_Oper)
+  final_R <- list(wm_Box, TCT, MC[[1]], round(MC[[2]], 2), num_Oper)
   return(final_R)
 }
 
