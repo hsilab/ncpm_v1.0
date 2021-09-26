@@ -8,7 +8,7 @@ Depends: R (>= 3.1.0), nlme
 Suggests: MASS
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+LazyData: true
 License: GPL (>=2)
 Encoding: UTF-8
-Lazydata: true
 RoxygenNote: 7.1.1
