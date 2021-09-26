@@ -165,7 +165,8 @@ NCPMGUI <- function () {
                           tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/N3vmOJEUawI", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA)
                           ),
                  tabPanel("Glossary", h2("Glossary"), # DW new
-                          DT::dataTableOutput("glossary"))
+                          # DT::dataTableOutput("glossary"))
+                          shiny::dataTableOutput("glossary")) # Junho - 09252021
                ))
     )
   )
@@ -887,7 +888,8 @@ NCPMGUI <- function () {
     gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv") # Junho
 
-    output$glossary = DT::renderDataTable({
+    output$glossary = shiny::renderDataTable({ # Junho - 09252021
+    # output$glossary = DT::renderDataTable({
       fread("./inst/extdata/GlossaryGUI_JP.csv")
     })
 
