@@ -1,6 +1,7 @@
 #### data: operator set
 # oper_set <- read.csv(file="./inst/extdata/cpmr_test.csv", header=FALSE)
- oper_set <- read.csv(file="./data/cpmr_test.csv", header=FALSE)
+# oper_set <- read.csv(file="./data/cpmr_test.csv", header=FALSE)
+ oper_set <- read.csv(file="./data/inst/extdata/cpmr_test.csv", header=FALSE)
 # oper_set <- read.csv(file="./extdata/cpmr_test.csv", header=FALSE) # Junho - 09252021
 #### Skill
 skill <- "Novice"
