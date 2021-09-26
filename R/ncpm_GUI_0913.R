@@ -1,4 +1,5 @@
-#' @import roxygen2 shiny dplyr ggplot2 reactable tidyverse skimr png data.table
+#' @import roxygen2 shiny dplyr ggplot2 reactable tidyverse skimr
+#' @importFrom data.table fread
 NULL
 
 #' NCPMGUI()
@@ -882,10 +883,11 @@ NCPMGUI <- function () {
 
     # DW New
     # gloss <- fread("C:/Users/david/Documents/Research/NSF-CAREER/GlossaryGUI.csv") # David
-    gloss <- fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv") # Junho
+     gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
+    # gloss <- fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv") # Junho
 
     output$glossary = DT::renderDataTable({
-      fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv")
+      fread("./data/GlossaryGUI_JP.csv")
     })
 
   })
@@ -926,17 +928,4 @@ NCPMcalc_exp <- function(scenario){
   ans = RunMain(scenario, "Expert")
 
   return(ans)
-}
-
-#' showPNG()
-#'
-#' @return PNG image file
-#' @export
-#'
-#' @examples
-#' showPNG()
-showPNG <- function() {
-  pp <- readPNG("D:/JP_project_test/ncpm/R/www/new_driver.PNG")
-  plot.new()
-  rasterImage(pp,0,0,1,1)
 }

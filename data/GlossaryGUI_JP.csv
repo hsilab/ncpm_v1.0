@@ -1,6 +1,5 @@
 Name,Definition,Reference,Task Completion Time (milliseconds)
 Look,Look at an item at a known position,"Kieras, 1997; John & Gray, 1995; Estes, 2017",550
-Proofread,Time to carefully count labelled words,,330
 Read,Time to read a single word,"Kieras, 1997; Estes, 2017",260
 Search,Search for an item at an unknown position,"Kieras, 1997; Estes, 2017",1250
 Saccade,A single rapid eye movement,"Card et al., 1986",230
@@ -32,4 +31,4 @@ Flick,Flick a screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",298
 double_Tap,Double tap a screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",358
 Zoomin,Zoom in on the screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506
 Zoomout,Zoom out from the screen,"Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506
-Point_Finger,Point finger at the screen,,340
+Point_Finger,Point finger at the screen,None,340
