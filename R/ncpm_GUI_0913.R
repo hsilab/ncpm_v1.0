@@ -885,8 +885,8 @@ NCPMGUI <- function () {
     # DW New
     # gloss <- fread("C:/Users/david/Documents/Research/NSF-CAREER/GlossaryGUI.csv") # David
     # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
-    gloss <- fread("./data/inst/extdata/GlossaryGUI_JP.csv") # Junho
-    # gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
+    # gloss <- fread("./data/inst/extdata/GlossaryGUI_JP.csv") # Junho
+    gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- fread("./extdata/GlossaryGUI_JP.csv") # Junho - new data path 09262021
     # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021
@@ -894,9 +894,9 @@ NCPMGUI <- function () {
 
     output$glossary = shiny::renderDataTable({ # Junho - 09252021
     # output$glossary = DT::renderDataTable({
-    # fread("./inst/extdata/GlossaryGUI_JP.csv")
+    fread("./inst/extdata/GlossaryGUI_JP.csv")
     # fread("./extdata/GlossaryGUI_JP.csv")
-     fread("./data/inst/extdata/GlossaryGUI_JP.csv")
+    # fread("./data/inst/extdata/GlossaryGUI_JP.csv")
     # read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021
     })
 
