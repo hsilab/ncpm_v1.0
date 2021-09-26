@@ -883,11 +883,12 @@ NCPMGUI <- function () {
 
     # DW New
     # gloss <- fread("C:/Users/david/Documents/Research/NSF-CAREER/GlossaryGUI.csv") # David
-     gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
+    # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
+    gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv") # Junho
 
     output$glossary = DT::renderDataTable({
-      fread("./data/GlossaryGUI_JP.csv")
+      fread("./inst/extdata/GlossaryGUI_JP.csv")
     })
 
   })

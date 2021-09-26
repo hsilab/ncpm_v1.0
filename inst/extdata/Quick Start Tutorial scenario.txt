@@ -1,0 +1,20 @@
+Goal: Add a plate number
+Look <Plate number>
+Store <Plate number>
+Look at an in-vehicle display
+Reach hands on the screen
+Search a button to add the number
+Touch the button
+Type <HZO-01K>
+Look at the screen
+Verify the number
+
+
+Insert line
+Reach hands... -> Also: Reach hands...
+
+Delete line
+Store
+Search
+Type
+Look at the screen
