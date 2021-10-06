@@ -33,6 +33,9 @@ ExtOper <- function(line_of_input) {
   }
 }
 
+# a<-read.csv(file="D:/JP_project_test/ncpm/task_1.csv", header=TRUE)
+#
+# RetrievingOperTime("Look", 2, a, "Novice")
 
 #' RetrOpTime_Motor()
 #'
@@ -74,7 +77,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill) {
   matched_Time <- 0
   for (i in 1:oper_set_line) {
     if (oper == oper_set[i, 2])
-      matched_Time <- oper_set[i, 3]
+      matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 10062021
   }
 
   # N-CPM : Novice Vision
@@ -82,7 +85,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill) {
     repetition <- sample(1:3, size=1) # Novice look & searching pattern
     for (i in 1:oper_set_line) {
       if (oper == oper_set[i, 2])
-        matched_Time <- oper_set[i, 3]
+        matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 10062021
     }
     matched_Time <- repetition * matched_Time
   }

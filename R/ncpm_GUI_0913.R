@@ -203,6 +203,8 @@ NCPMGUI <- function () {
     timeInput <- reactive({
 
       inFile <- input$dataset2
+      print(inFile)
+      print(inFile$datapath)
 
       if(is.null(inFile))
       {
@@ -214,6 +216,7 @@ NCPMGUI <- function () {
         data <- read.csv(inFile$datapath, header = TRUE)
       }
       data <- NCPMcalc(data)
+      print(data[[2]])
       data[[2]]
 
     })
@@ -681,6 +684,11 @@ NCPMGUI <- function () {
       v$code <- codelines$df
     })
 
+    # # Junho - 1006
+    # observeEvent(input$dataset2,{
+    #   v$code <- codelines$df
+    # })
+
     # Junho - 0903
     observeEvent(input$done,{
       v$code <- final$code
@@ -886,7 +894,7 @@ NCPMGUI <- function () {
     # gloss <- fread("C:/Users/david/Documents/Research/NSF-CAREER/GlossaryGUI.csv") # David
     # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
     # gloss <- fread("./data/inst/extdata/GlossaryGUI_JP.csv") # Junho
-    gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
+    # gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- fread("./extdata/GlossaryGUI_JP.csv") # Junho - new data path 09262021
     # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho - new data path 09252021
     # gloss <- read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021
@@ -894,7 +902,8 @@ NCPMGUI <- function () {
 
     output$glossary = shiny::renderDataTable({ # Junho - 09252021
     # output$glossary = DT::renderDataTable({
-    fread("./inst/extdata/GlossaryGUI_JP.csv")
+      glossaryGUI
+    # fread("./inst/extdata/GlossaryGUI_JP.csv")
     # fread("./extdata/GlossaryGUI_JP.csv")
     # fread("./data/inst/extdata/GlossaryGUI_JP.csv")
     # read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021

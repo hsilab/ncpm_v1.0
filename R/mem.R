@@ -81,6 +81,7 @@ MultipleChunks <- function (oper_Time, oper_Name, line) {
 #' ExtChunk(3, "Look", 5000, 4200, working memory, 550, 1, chunk_Lifecycle)
 ExtChunk <- function (line_of_input, oper, time_current, time_past, wm_Box, oper_Time, num_of_chunks, chunk_Lifecyle) {
 
+  print(line_of_input)
   counter <- 0
   candidate_chunk <- 0
   multiple_chunk_counter <- 0
