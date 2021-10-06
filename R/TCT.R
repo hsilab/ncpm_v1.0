@@ -11,6 +11,7 @@
 ExtOper <- function(line_of_input) {
   oper_raw<-strsplit(line_of_input, " ")
 
+  # print("ExtOper")
   # dot_counter is not needed for Scenario Development tab
   mat <- matrix(unlist(oper_raw), ncol=1, byrow=TRUE)
   dot_counter <- 0
@@ -25,6 +26,7 @@ ExtOper <- function(line_of_input) {
     # for Cogulator generated code - Starting with a dot for every row
     oper<-substr(mat[1,1], dot_counter + 1, nchar(mat[1,1]))
 
+    # print(oper)
     return(oper)
   } else {
     # for Scenario Development tab - NO DOT at the beginning of the code

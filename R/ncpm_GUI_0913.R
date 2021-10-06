@@ -41,7 +41,8 @@ NCPMGUI <- function () {
                                               # showPNG()), # not working
                                               # tags$img(height=100, width=100, src="http://www.rstudio.com/images/RStudio.2x.png")), # not working
                                               # tags$img(height=208, width=312, src="https://cliparting.com/wp-content/uploads/2016/05/Cartoon-car-clip-art-free-vector-for-free-download-about-free.jpg")), # worked
-                                              tags$img(height=208, width=312, src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Car_pictogram.svg/1560px-Car_pictogram.svg.png")), # worked
+                                              tags$img(height=208, width=312, src="https://static9.depositphotos.com/1074452/1184/i/600/depositphotos_11843259-stock-photo-novice-expert-keys-show-amateur.jpg")),
+                                              #tags$img(height=208, width=312, src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Car_pictogram.svg/1560px-Car_pictogram.svg.png")), # worked
 
                                        column(6)
                                      )
@@ -51,7 +52,7 @@ NCPMGUI <- function () {
                               column(6,"Model Overview:
     The purpose of this model is to
     predict novices' task performance and cognitive workload.
-    Click on the HELP tab or upload a file to get started."),
+    Click on the help tab or upload a file to get started."),
                    #Junho - 0827 - goal
                    column(6,fileInput("dataset2", "Choose CSV File",
                    # column(6,fileInput("dataset", "Choose CSV File", # This is for testing data. We can switch this to the build a scenario part at the end.
@@ -203,8 +204,8 @@ NCPMGUI <- function () {
     timeInput <- reactive({
 
       inFile <- input$dataset2
-      print(inFile)
-      print(inFile$datapath)
+      #print(inFile)
+      #print(inFile$datapath)
 
       if(is.null(inFile))
       {
@@ -216,7 +217,7 @@ NCPMGUI <- function () {
         data <- read.csv(inFile$datapath, header = TRUE)
       }
       data <- NCPMcalc(data)
-      print(data[[2]])
+      #print(data[[2]])
       data[[2]]
 
     })

@@ -81,7 +81,8 @@ MultipleChunks <- function (oper_Time, oper_Name, line) {
 #' ExtChunk(3, "Look", 5000, 4200, working memory, 550, 1, chunk_Lifecycle)
 ExtChunk <- function (line_of_input, oper, time_current, time_past, wm_Box, oper_Time, num_of_chunks, chunk_Lifecyle) {
 
-  print(line_of_input)
+  #print("ExtChunk")
+  #print(line_of_input)
   counter <- 0
   candidate_chunk <- 0
   multiple_chunk_counter <- 0
@@ -462,6 +463,7 @@ GetProbRecall <- function (m_value) {
   return(p)
 }
 
+
 # Function: number of operator ================================================================================================================================
 #' GetNumOper()
 #'
@@ -480,7 +482,7 @@ GetProbRecall <- function (m_value) {
 GetNumOper <- function (oper_Name, num_Oper, oper_Time, skill) {
   for (i in 1:nrow(oper_set)) {
     if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") && (skill == "Novice") ) {
-      total_P <- oper_Time/oper_set[i,3]
+      total_P <- oper_Time/(as.numeric(oper_set[i,3]))
       num_Oper$Perceptual <- num_Oper$Perceptual + total_P
     }
     else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") )
