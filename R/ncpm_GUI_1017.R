@@ -13,6 +13,9 @@ NULL
 NCPMGUI <- function () {
 
   ##### UI part
+
+
+  #### NOTE = PERCEPTUAL = COGNITIVE and COGNITIVE = PERCEPTUAL
   ui <- fluidPage(
 
     # CSS
@@ -68,8 +71,8 @@ NCPMGUI <- function () {
 
                fluidPage(
                  fluidRow(
-                   column(2,radioButtons('cognitive','Cognitive Operators', choices = c('Look','Read','Search', 'Saccade','Hear','custom'), selected = character(0))),
-                   column(2,radioButtons('perceptual','Perceptual Operators', choices = c('Attend','Initiate','Ignore','Mental', 'Recall','Store','Think','Verify','custom'), selected = character(0))),
+                   column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','custom'), selected = character(0))),
+                   column(2,radioButtons('perceptual','Cognitive Operators', choices = c('Attend','Initiate','Ignore','Mental', 'Recall','Store','Think','Verify','custom'), selected = character(0))),
                    column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Say','Wait','Reach','Flick','Zoomin','Zoomout','custom'), selected = character(0))),
                    column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','Call sign', 'custom'), selected = character(0))),
                    column(4,tableOutput("Code")),
@@ -81,6 +84,8 @@ NCPMGUI <- function () {
                textOutput("chunkresult"),
                # This only shows up if a custom operator is chosen
                uiOutput("customop"),
+               # DW 10/16/21 for inputting time.
+               uiOutput("customtimeop"),
                uiOutput("custombuttonop"),
                # the next part will only show up if custom chunk is chosen
                uiOutput("customtext"),
@@ -382,7 +387,8 @@ NCPMGUI <- function () {
 
     ############################
     # DEVELOP A SCENARIO
-    v <- reactiveValues(current_selection = "", parallel = "", chunk = "", code = "")
+    # DW 10/16/21 added op
+    v <- reactiveValues(current_selection = "", parallel = "", chunk = "", code = "",op = "")
 
     observeEvent(input$parallel,{
       if(input$parallel)
@@ -441,16 +447,29 @@ NCPMGUI <- function () {
 
       if (input$cognitive == 'custom')
       {
+        v$op <- "custom"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
+        # DW 10/16/21
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
         output$custombuttonop <- renderUI ({
-          actionButton("confirmop", label = "Confirm Custom Operator Input")
+          actionButton("confirmop", label = "Confirm Custom Operator")
+          # DW 10/16/21 Grammar
         })
+
       }
       else
       {
         output$customop <- renderUI({NULL})
         output$custombuttonop <- renderUI({NULL})
+        v$op <- ""
+        # DW 10/16/21
+        output$customtimeop <- renderUI({NULL})
       }
+
+      # JP 10/17/21
+      # print(output$customop)
+      # print(output$customtimeop)
+
       if (input$cognitive == 'Look')
       {
         output$Description <- renderText({paste("Look: Look at an item at a known position")})
@@ -471,6 +490,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Hear: Listen to someone speaking. Label should be the text of the speech")})
       }
+      else
+      {
+        output$Description <- renderText({paste("")})
+      }
     })
     observeEvent(input$perceptual,{
       v$current_selection <- input$perceptual
@@ -485,15 +508,23 @@ NCPMGUI <- function () {
                          selected = character(0))
       if (input$perceptual == 'custom')
       {
+        v$op <- "perceptual"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
+        # DW 10/16/21
         output$custombuttonop <- renderUI ({
-          actionButton("confirmop", label = "Confirm Custom Operator Input")
+          actionButton("confirmop", label = "Confirm Custom Operator")
+          # DW 10/16/21 Grammar
         })
       }
       else
       {
+        # hiding boxes
         output$customop <- renderUI({NULL})
         output$custombuttonop <- renderUI({NULL})
+        v$op <- ""
+        output$customtimeop <- renderUI({NULL})
+        # DW 10/16/21
       }
       if(input$perceptual == 'Attend')
       {
@@ -527,6 +558,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Verify: Generic operator for thinking")})
       }
+      else
+      {
+        output$Description <- renderText({paste("")})
+      }
     })
     observeEvent(input$motor,{
       v$current_selection <- input$motor
@@ -541,7 +576,10 @@ NCPMGUI <- function () {
                          selected = character(0))
       if (input$motor == 'custom')
       {
+        v$op <- "motor"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
+        # DW 10/16/21
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
         })
@@ -550,6 +588,9 @@ NCPMGUI <- function () {
       {
         output$customop <- renderUI({NULL})
         output$custombuttonop <- renderUI({NULL})
+        v$op <- ""
+        output$customtimeop <- renderUI({NULL})
+        # DW 10/16/21
       }
       if (input$motor == 'Drag')
       {
@@ -619,6 +660,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Zoomout: Zoom out from the screen")})
       }
+      else
+      {
+        output$Description <- renderText({paste("")})
+      }
     })
 
     observeEvent(input$confirm,{
@@ -637,11 +682,12 @@ NCPMGUI <- function () {
         write.csv(codelines$df, file, row.names = FALSE)
       }
     )
-    observeEvent(input$custom,{
-      output$Description <- renderText({ paste("Descriptions go here")})
+#DW 10/16/21 Pretty sure this is redundant
+     #   observeEvent(input$custom,{
+  #    output$Description <- renderText({ paste("Descriptions go here")})
       #need to insert a very long if statement here, get it all from Junho.
-    }
-    )
+  #  }
+  #  )
 
     # initial reactive value
     codelines <- reactiveValues()
@@ -677,6 +723,7 @@ NCPMGUI <- function () {
         output$custombutton <- renderUI({NULL})
         output$customop <- renderUI({NULL})
         output$custombuttonop <- renderUI({NULL})
+        output$customtimeop <- renderUI({NULL})
       }
     })
 
@@ -684,6 +731,7 @@ NCPMGUI <- function () {
     observeEvent(input$dataset,{
       v$code <- codelines$df
     })
+
 
     # # Junho - 1006
     # observeEvent(input$dataset2,{
@@ -733,7 +781,7 @@ NCPMGUI <- function () {
       v$current_selection <- c("")
       v$chunk <- c("")
       # output$result <- c("")
-      # ouput$chunkresult <- c("")
+      # output$chunkresult <- c("")
       # output$Description <- c("")
       output$result <- renderText({ # DW 9/11/21 Bug fix
         paste("")
@@ -749,6 +797,7 @@ NCPMGUI <- function () {
       output$custombutton <- renderUI({NULL})
       output$customop <- renderUI({NULL})
       output$custombuttonop <- renderUI({NULL})
+      output$customtimeop <- renderUI({NULL})
     })
 
     # for removing selections
@@ -768,7 +817,7 @@ NCPMGUI <- function () {
       v$current_selection <- c("")
       v$chunk <- c("")
       # output$result <- c("")
-      # ouput$chunkresult <- c("")
+      # output$chunkresult <- c("")
       # output$Description <- c("")
       output$result <- renderText({ # DW 9/11/21 Bug fix
         paste("")
@@ -886,6 +935,41 @@ NCPMGUI <- function () {
       write.csv(rv$edit, file, row.names = FALSE)
     }
 
+    # observeEvent(input$confirmop,{
+    #   v$current_selection <- input$customop
+    #   test_time <- input$customtimeop
+    #   test_opname <- input$customtextop
+    #   print(test_time)
+    #   print(test_opname)
+    # })
+    oper_set_new <- reactiveValues()
+    # oper_set_new$c <- data.frame(Code=numeric(0),Category_1 = numeric(0),Category_2= numeric(0),TCT = numeric(0))
+    oper_set_new$c <- data.frame(Code=numeric(0))
+
+    observeEvent(input$confirmop,{
+      v$current_selection <- paste(input$customtextop, sep = "")
+
+      test_time <- input$customtimeop
+      test_opname <- input$customtextop
+      print(test_time)
+      print(test_opname)
+
+      # oper_set <- rbind(oper_set , c("Custom", test_opname, as.numeric(test_time)))
+      # newLine <- isolate()
+      # isolate(oper_set[nrow(oper_set)+1,] <- c("Custom", test_opname, as.numeric(test_time)))
+
+      oper_set_new$c <- NewOper(test_opname, test_time, oper_set_new$c)
+      print(tail(oper_set_new$c))
+
+      oper_set <- rbind(oper_set, oper_set_new$c)
+      print(tail(oper_set))
+
+      output$result <- renderText({
+        paste("You chose ", input$customtextop)
+      })
+
+    })
+
     # DW 9/8/21 deleted old novice vs expert stuff.
 
     ############################################
@@ -913,6 +997,30 @@ NCPMGUI <- function () {
   })
 
   shinyApp(ui, server)
+}
+
+
+#' NewOper
+#'
+#' @param op_name operator name
+#' @param op_time operator time
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' NewOper(a, b)
+NewOper <- function(op_name, op_time,oper_set_new){
+
+  oper_set_new <- rbind(oper_set_new , c("Custom", op_name, as.numeric(op_time)))
+
+  # oper_set_new <- oper_set
+
+  colnames(oper_set_new)[1]<-"Category_1"
+  colnames(oper_set_new)[2]<-"Category_2"
+  colnames(oper_set_new)[3]<-"TCT"
+
+  return(oper_set_new)
 }
 
 
