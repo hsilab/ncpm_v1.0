@@ -4,7 +4,7 @@
 \alias{NewOper}
 \title{NewOper}
 \usage{
-NewOper(op_name, op_time)
+NewOper(op_name, op_time, oper_set_new)
 }
 \arguments{
 \item{op_name}{operator name}

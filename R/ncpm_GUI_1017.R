@@ -193,6 +193,8 @@ NCPMGUI <- function () {
   #' no example
   server = shinyServer(function(input, output,session) {
 
+    oper_set_shiny <- 0
+
     #####################
     ### RESULTS SUMMARY - Novice
 
@@ -221,8 +223,8 @@ NCPMGUI <- function () {
       {
         data <- read.csv(inFile$datapath, header = TRUE)
       }
-      data <- NCPMcalc(data)
-      #print(data[[2]])
+      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+
       data[[2]]
 
     })
@@ -240,7 +242,8 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data <- NCPMcalc(data)
+      #data <- NCPMcalc(data)
+      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data[[4]]
 
     })
@@ -258,7 +261,8 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data <- NCPMcalc(data)
+      #data <- NCPMcalc(data)
+      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data[[5]]
     })
     output$Perc <- renderText({
@@ -281,7 +285,8 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data <- NCPMcalc(data)
+      #data <- NCPMcalc(data)
+      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data <- data[[1]]
       data <- dplyr::select(data, -Stack_Depth, -Activation )
       data
@@ -301,9 +306,9 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- NCPMcalc(data)
+      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data_nov[[2]]
-      data_exp <- NCPMcalc_exp(data)
+      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
       data_exp[[2]]
 
       a<-c()
@@ -330,9 +335,9 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- NCPMcalc(data)
+      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data_nov[[4]]
-      data_exp <- NCPMcalc_exp(data)
+      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
       data_exp[[4]]
 
       a<-c()
@@ -359,9 +364,9 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- NCPMcalc(data)
+      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       data_nov[[5]]
-      data_exp <- NCPMcalc_exp(data)
+      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
       data_exp[[5]]
 
       a<-c()
@@ -964,6 +969,8 @@ NCPMGUI <- function () {
       oper_set <- rbind(oper_set, oper_set_new$c)
       print(tail(oper_set))
 
+      oper_set_shiny <<- oper_set
+
       output$result <- renderText({
         paste("You chose ", input$customtextop)
       })
@@ -1034,9 +1041,11 @@ NewOper <- function(op_name, op_time,oper_set_new){
 #'
 #' @examples
 #' NCPMcalc(sce, "Novice")
-NCPMcalc <- function(scenario){
+NCPMcalc <- function(scenario, time_library){
 
-  ans = RunMain(scenario, "Novice")
+  ans = RunMain(scenario, time_library, "Novice")
+  print("NCPMcalc")
+  print(tail(time_library))
 
   return(ans)
 }
@@ -1051,9 +1060,9 @@ NCPMcalc <- function(scenario){
 #'
 #' @examples
 #' NCPMcalc_exp(sce, "Expert")
-NCPMcalc_exp <- function(scenario){
+NCPMcalc_exp <- function(scenario, time_library){
 
-  ans = RunMain(scenario, "Expert")
+  ans = RunMain(scenario, time_library, "Expert")
 
   return(ans)
 }

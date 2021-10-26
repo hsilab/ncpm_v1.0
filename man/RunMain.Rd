@@ -4,7 +4,7 @@
 \alias{RunMain}
 \title{RunMain()}
 \usage{
-RunMain(scenario, skill)
+RunMain(scenario, time_library, skill)
 }
 \arguments{
 \item{scenario}{Scenario in CSV format}

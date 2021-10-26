@@ -72,8 +72,10 @@ RetrOpTime_Motor <- function (oper, k) {
 #'
 #' @examples
 #' RetrievingOperTime(operator name, line number, scenario, skill)
-RetrievingOperTime <- function (oper, k, scenario, skill) {
+RetrievingOperTime <- function (oper, k, scenario, skill, oper_set) {
   oper_set_line <- nrow(oper_set)
+  print("TCT")
+  print(tail(oper_set))
 
   # bring operator time from the database
   matched_Time <- 0

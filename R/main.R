@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' RunMain(csv file, "Novice")
-RunMain <- function(scenario, skill) {
+RunMain <- function(scenario, time_library, skill) {
   Reseted <- ResetAll()
   wm_Box <- Reseted[[1]]
   chunk_Lifecyle <- Reseted[[2]]
@@ -20,7 +20,7 @@ RunMain <- function(scenario, skill) {
 
   for (i in 2:nrow(scenario)) {
     oper_Name <- ExtOper(scenario[i, 1])
-    oper_Time <- RetrievingOperTime(oper_Name, i, scenario, skill)
+    oper_Time <- RetrievingOperTime(oper_Name, i, scenario, skill, time_library)
     acc_Time_1 <- acc_Time_1 + as.numeric(oper_Time)
 
     num_of_chunks <- MultipleChunks(oper_Time, oper_Name, scenario[i, 1])

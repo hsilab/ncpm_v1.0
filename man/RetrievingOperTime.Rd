@@ -4,7 +4,7 @@
 \alias{RetrievingOperTime}
 \title{RetrievingOperTime()}
 \usage{
-RetrievingOperTime(oper, k, scenario, skill)
+RetrievingOperTime(oper, k, scenario, skill, oper_set)
 }
 \arguments{
 \item{oper}{operator name}

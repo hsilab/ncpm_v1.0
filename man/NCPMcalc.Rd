@@ -4,7 +4,7 @@
 \alias{NCPMcalc}
 \title{NCPMcalc}
 \usage{
-NCPMcalc(scenario)
+NCPMcalc(scenario, time_library)
 }
 \arguments{
 \item{scenario}{scenario file}
