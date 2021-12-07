@@ -31,6 +31,7 @@ ExtOper <- function(line_of_input) {
   } else {
     # for Scenario Development tab - NO DOT at the beginning of the code
 
+    # print(oper_raw[[1]][3])
     return(oper_raw[[1]][3])
   }
 }
@@ -74,8 +75,8 @@ RetrOpTime_Motor <- function (oper, k) {
 #' RetrievingOperTime(operator name, line number, scenario, skill)
 RetrievingOperTime <- function (oper, k, scenario, skill, oper_set) {
   oper_set_line <- nrow(oper_set)
-  print("TCT")
-  print(tail(oper_set))
+  # print("TCT")
+  # print(tail(oper_set))
 
   # bring operator time from the database
   matched_Time <- 0
@@ -86,7 +87,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set) {
 
   # N-CPM : Novice Vision
   if ( (oper == "Look" | oper == "Search") && (skill == "Novice") ) {
-    repetition <- sample(1:3, size=1) # Novice look & searching pattern
+    repetition <- sample(1:5, size=1) # Novice look & searching pattern
     for (i in 1:oper_set_line) {
       if (oper == oper_set[i, 2])
         matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 10062021
@@ -141,6 +142,18 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set) {
     # 280=average type speed, 4 = number of characters in "type"
     matched_Time <- (nchar(scenario[k,1]) - 4 - dot_counter) * 280
   }
+
+  # N-CPM : Novice "Read" involves more thingkings
+  if ( (oper == "Read") && (skill == "Novice") ) {
+    repetition <- sample(1:5, size=1) # Novice look & searching pattern
+    oper <- "Think"
+    for (i in 1:oper_set_line) {
+      if (oper == oper_set[i, 2])
+        matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 12052021
+    }
+    matched_Time <- repetition * matched_Time
+  }
+
   return(matched_Time)
 }
 

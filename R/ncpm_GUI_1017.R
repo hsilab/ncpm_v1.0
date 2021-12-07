@@ -223,8 +223,13 @@ NCPMGUI <- function () {
       {
         data <- read.csv(inFile$datapath, header = TRUE)
       }
-      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
 
+      #data <- NCPMcalc(data)
+      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data <- NCPMcalc(data, oper_set)
+      else
+        data <- NCPMcalc(data, oper_set_shiny)
       data[[2]]
 
     })
@@ -243,7 +248,11 @@ NCPMGUI <- function () {
         data <- read.csv(inFile$datapath, header = TRUE)
 
       #data <- NCPMcalc(data)
-      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data <- NCPMcalc(data, oper_set)
+      else
+        data <- NCPMcalc(data, oper_set_shiny)
       data[[4]]
 
     })
@@ -262,7 +271,11 @@ NCPMGUI <- function () {
         data <- read.csv(inFile$datapath, header = TRUE)
 
       #data <- NCPMcalc(data)
-      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data <- NCPMcalc(data, oper_set)
+      else
+        data <- NCPMcalc(data, oper_set_shiny)
       data[[5]]
     })
     output$Perc <- renderText({
@@ -306,9 +319,17 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data_nov <- NCPMcalc(data, oper_set)
+      else
+        data_nov <- NCPMcalc(data, oper_set_shiny)
       data_nov[[2]]
-      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      if(is.null(input$confirmop))
+        data_exp <- NCPMcalc_exp(data, oper_set)
+      else
+        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
       data_exp[[2]]
 
       a<-c()
@@ -335,9 +356,17 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data_nov <- NCPMcalc(data, oper_set)
+      else
+        data_nov <- NCPMcalc(data, oper_set_shiny)
       data_nov[[4]]
-      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      if(is.null(input$confirmop))
+        data_exp <- NCPMcalc_exp(data, oper_set)
+      else
+        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
       data_exp[[4]]
 
       a<-c()
@@ -364,9 +393,17 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
+      if(is.null(input$confirmop))
+        data_nov <- NCPMcalc(data, oper_set)
+      else
+        data_nov <- NCPMcalc(data, oper_set_shiny)
       data_nov[[5]]
-      data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
+      if(is.null(input$confirmop))
+        data_exp <- NCPMcalc_exp(data, oper_set)
+      else
+        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
       data_exp[[5]]
 
       a<-c()
@@ -744,9 +781,9 @@ NCPMGUI <- function () {
     # })
 
     # Junho - 0903
-    observeEvent(input$done,{
-      v$code <- final$code
-    })
+    # observeEvent(input$done,{
+    #   v$code <- final$code
+    # })
 
     # data <- as.data.frame(v$code, header=FALSE)
     # nov_Rslt <- NCPMcalc(data)
@@ -956,18 +993,18 @@ NCPMGUI <- function () {
 
       test_time <- input$customtimeop
       test_opname <- input$customtextop
-      print(test_time)
-      print(test_opname)
+      # print(test_time)
+      # print(test_opname)
 
       # oper_set <- rbind(oper_set , c("Custom", test_opname, as.numeric(test_time)))
       # newLine <- isolate()
       # isolate(oper_set[nrow(oper_set)+1,] <- c("Custom", test_opname, as.numeric(test_time)))
 
       oper_set_new$c <- NewOper(test_opname, test_time, oper_set_new$c)
-      print(tail(oper_set_new$c))
+      # print(tail(oper_set_new$c))
 
       oper_set <- rbind(oper_set, oper_set_new$c)
-      print(tail(oper_set))
+      # print(tail(oper_set))
 
       oper_set_shiny <<- oper_set
 
@@ -1044,8 +1081,8 @@ NewOper <- function(op_name, op_time,oper_set_new){
 NCPMcalc <- function(scenario, time_library){
 
   ans = RunMain(scenario, time_library, "Novice")
-  print("NCPMcalc")
-  print(tail(time_library))
+  # print("NCPMcalc")
+  # print(tail(time_library))
 
   return(ans)
 }
