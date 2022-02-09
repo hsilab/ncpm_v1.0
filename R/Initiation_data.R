@@ -21,7 +21,7 @@ colnames(oper_set)[1]<-"Category_1"
 colnames(oper_set)[2]<-"Category_2"
 colnames(oper_set)[3]<-"TCT"
 
-oper_set
+head(oper_set)
 
 oper_set <- rbind(oper_set , c("see","Look",as.numeric(550)))
 oper_set <- rbind(oper_set , c("see","Perceptual_processor",as.numeric(100)))
@@ -69,8 +69,9 @@ oper_set <- rbind(oper_set , c("hands","Zoomout",as.numeric(506)))
 oper_set <- rbind(oper_set , c("hands","GLM_point",as.numeric(340)))
 oper_set <- rbind(oper_set , c("hands","Tap_dup",as.numeric(450)))
 oper_set <- rbind(oper_set , c("Foot","Kick",as.numeric(400)))
+oper_set <- oper_set[-1,]
 
-oper_set
+head(oper_set)
 
 
 
@@ -121,11 +122,12 @@ glossaryGUI <- rbind(glossaryGUI, c("Wait","User waiting for system. Modify time
 glossaryGUI <- rbind(glossaryGUI, c("Reach","Move a hand to a display","Maynard et al., 1948",234))
 glossaryGUI <- rbind(glossaryGUI, c("Flick","Flick a screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",298.5))
 glossaryGUI <- rbind(glossaryGUI, c("double_Tap","Double tap a screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",358))
-glossaryGUI <- rbind(glossaryGUI, c("Zoomin","Zoom in on the screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506))
-glossaryGUI <- rbind(glossaryGUI, c("Zoomout","Zoom out from the screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506))
+glossaryGUI <- rbind(glossaryGUI, c("Zoom in","Zoom in on the screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506))
+glossaryGUI <- rbind(glossaryGUI, c("Zoom out","Zoom out from the screen","Kim & Myung, 2016; Nystrom, 2018; Park & Zahabi, 2021",506))
 glossaryGUI <- rbind(glossaryGUI, c("Point_Finger","Point finger at the screen","None",340))
+glossaryGUI <- glossaryGUI[-1,]
 
-glossaryGUI
+head(glossaryGUI)
 
 
 # data frame: working memory

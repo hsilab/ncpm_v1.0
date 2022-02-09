@@ -13,8 +13,6 @@ NULL
 NCPMGUI <- function () {
 
   ##### UI part
-
-
   #### NOTE = PERCEPTUAL = COGNITIVE and COGNITIVE = PERCEPTUAL
   ui <- fluidPage(
 
@@ -52,12 +50,12 @@ NCPMGUI <- function () {
                               )
                             ),
                             fluidRow(
-                              column(6,"Model Overview:
+                              column(4,"Model Overview:
     The purpose of this model is to
     predict novices' task performance and cognitive workload.
     Click on the help tab or upload a file to get started."),
                    #Junho - 0827 - goal
-                   column(6,fileInput("dataset2", "Choose CSV File",
+                   column(8,fileInput("dataset2", "Choose CSV File",
                    # column(6,fileInput("dataset", "Choose CSV File", # This is for testing data. We can switch this to the build a scenario part at the end.
                                       accept = c(
                                         "text/csv",
@@ -72,10 +70,10 @@ NCPMGUI <- function () {
                fluidPage(
                  fluidRow(
                    column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','custom'), selected = character(0))),
-                   column(2,radioButtons('perceptual','Cognitive Operators', choices = c('Attend','Initiate','Ignore','Mental', 'Recall','Store','Think','Verify','custom'), selected = character(0))),
-                   column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Say','Wait','Reach','Flick','Zoomin','Zoomout','custom'), selected = character(0))),
-                   column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','Call sign', 'custom'), selected = character(0))),
-                   column(4,tableOutput("Code")),
+                   column(2,radioButtons('perceptual','Cognitive Operators', choices = c('Attend','Initiate','Ignore','Recall','Store','Think','Verify','custom'), selected = character(0))),
+                   column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Reach','Flick','Zoom in','Zoom out','custom'), selected = character(0))),                   column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','custom'), selected = character(0))),
+                    column(2, radioButtons('system','System',choices =c('Wait'), selected = character(0))),
+                   column(2,tableOutput("Code")),
 
                  )
                ),
@@ -96,15 +94,15 @@ NCPMGUI <- function () {
                checkboxInput("goal","Add Goal?", FALSE),
                actionButton("add","Add new line to Code"),
                actionButton("same","Add to current line"),
-               actionButton("reset","Remove Selections"),
+               actionButton("reset","Remove current selections"),
                actionButton("undo","Remove last line of code"), #make more robust
                #            tableOutput("Code"), # should put this to the right of inputs deal with aesthetic last
                actionButton("moveedit","Move to editing"), # moves code to editing phase.
-               #   downloadButton("downloadData", "Download")
+               # downloadButton("downloadData", "Download")
                # Disable "Work Done" 9/17/21 - Junho
                # actionButton("dataset","Work Done")
       ),
-      tabPanel("See Novice vs. Expert",
+      tabPanel("Novice and Expert Comparison",
                "The novice performance can be compared to",
                "the expert performance here. Click a tab to",
                "view each comparison.",
@@ -151,7 +149,7 @@ NCPMGUI <- function () {
                    tableOutput("contents")
                  ),
                  fluidRow(
-                   h4(" * Column information * "),
+                   h4(" * Note * "),
                    tabPanel("Column information ", "Chunk Number: Added chunk's number", HTML("<br/>"),
                             "Chunk_Name: Added chunk's name", HTML("<br/>"),
                             "Chunk_Arrival_Time: The time when chunk was added to working memory (milliseconds)", HTML("<br/>"),
@@ -162,7 +160,7 @@ NCPMGUI <- function () {
                )
       ),
 
-      tabPanel("Help", "Click on a tab to get some help with that tab.",
+      tabPanel("Help", "Click on each tab for more information.",
                tabsetPanel(
                  tabPanel("Scenario Development", "The help page for developing scenarios goes here.", HTML("<br/>"),
                           tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/hmv_GTk9vrw", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
@@ -200,10 +198,10 @@ NCPMGUI <- function () {
 
     # DW 9/8/21 hiding tabs and new button
     hideTab(inputId = "tabs", target = "Results Summary")
-    hideTab(inputId = "tabs", target = "See Novice vs. Expert")
+    hideTab(inputId = "tabs", target = "Novice and Expert Comparison")
     observeEvent(input$uploaded,{
       showTab(inputId = "tabs", target = "Results Summary")
-      showTab(inputId = "tabs", target = "See Novice vs. Expert")
+      showTab(inputId = "tabs", target = "Novice and Expert Comparison")
 
     })
 
@@ -230,6 +228,10 @@ NCPMGUI <- function () {
         data <- NCPMcalc(data, oper_set)
       else
         data <- NCPMcalc(data, oper_set_shiny)
+
+      # Junho - 2/9/22
+      print(data)
+
       data[[2]]
 
     })
@@ -280,12 +282,18 @@ NCPMGUI <- function () {
     })
     output$Perc <- renderText({
       opInput()[[1]]
+      # Junho - 2/9/22
+      print(opInput()[[1]])
     })
     output$Cog <- renderText({
       opInput()[[2]]
+      # Junho - 2/9/22
+      print(opInput()[[2]])
     })
     output$Motor <- renderText({
       opInput()[[3]]
+      # Junho - 2/9/22
+      print(opInput()[[3]])
     })
 
     # Chunk structure
@@ -486,6 +494,9 @@ NCPMGUI <- function () {
       updateRadioButtons(session,
                          'motor',
                          selected = character(0))
+      updateRadioButtons(session,
+                         'system',
+                         selected = character(0))
 
       if (input$cognitive == 'custom')
       {
@@ -547,6 +558,9 @@ NCPMGUI <- function () {
                          selected = character(0))
       updateRadioButtons(session,
                          'motor',
+                         selected = character(0))
+      updateRadioButtons(session,
+                         'system',
                          selected = character(0))
       if (input$perceptual == 'custom')
       {
@@ -615,6 +629,9 @@ NCPMGUI <- function () {
                          selected = character(0))
       updateRadioButtons(session,
                          'cognitive',
+                         selected = character(0))
+      updateRadioButtons(session,
+                         'system',
                          selected = character(0))
       if (input$motor == 'custom')
       {
@@ -694,19 +711,36 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Flick: Flick a screen")})
       }
-      else if (input$motor == 'Zoomin')
+      else if (input$motor == 'Zoom in')
       {
-        output$Description <- renderText({paste("Zoomin: Zoom in on the screen")})
+        output$Description <- renderText({paste("Zoom in: Zoom in on the screen")})
       }
-      else if (input$motor == 'Zoomout')
+      else if (input$motor == 'Zoom out')
       {
-        output$Description <- renderText({paste("Zoomout: Zoom out from the screen")})
+        output$Description <- renderText({paste("Zoom out: Zoom out from the screen")})
       }
       else
       {
         output$Description <- renderText({paste("")})
       }
     })
+    observeEvent(input$system,{
+      v$current_selection <- input$system
+      output$result <- renderText({
+        paste("You chose ", v$current_selection)
+      })
+      updateRadioButtons(session,
+                         'perceptual',
+                         selected = character(0))
+      updateRadioButtons(session,
+                         'motor',
+                         selected = character(0))
+      updateRadioButtons(session,
+                         'cognitive',
+                         selected = character(0))
+      output$Description <- renderText({paste("Wait: User waiting for system. Modify time by adding x seconds at end of line")})
+    })
+
 
     observeEvent(input$confirm,{
       v$chunk <- paste("<",input$customtext,">", sep = "")
@@ -734,6 +768,9 @@ NCPMGUI <- function () {
     # initial reactive value
     codelines <- reactiveValues()
     codelines$df <- data.frame(Code = numeric(0))
+
+
+
     newEntry <- observe({
       if(input$add > 0) {
         updateRadioButtons(session,
@@ -744,6 +781,9 @@ NCPMGUI <- function () {
                            selected = character(0))
         updateRadioButtons(session,
                            'motor',
+                           selected = character(0))
+        updateRadioButtons(session,
+                           'system',
                            selected = character(0))
         updateRadioButtons(session,
                            'chunk',
@@ -771,29 +811,8 @@ NCPMGUI <- function () {
 
     # Junho - 0827
     observeEvent(input$dataset,{
-      v$code <- codelines$df
+       v$code <- codelines$df
     })
-
-
-    # # Junho - 1006
-    # observeEvent(input$dataset2,{
-    #   v$code <- codelines$df
-    # })
-
-    # Junho - 0903
-    # observeEvent(input$done,{
-    #   v$code <- final$code
-    # })
-
-    # data <- as.data.frame(v$code, header=FALSE)
-    # nov_Rslt <- NCPMcalc(data)
-    # exp_Rslt <- NCPMcalc_exp(data)
-    # nov_TCT <- nov_Rslt[[2]]
-    # nov_MC <- nov_Rslt[[4]]
-    # nov_Oper <- nov_Rslt[[5]]
-    # exp_TCT <- exp_Rslt[[2]]
-    # exp_MC <- exp_Rslt[[4]]
-    # exp_Oper <- exp_Rslt[[5]]
 
     rv <- reactiveValues(edit = data.frame(Code = numeric(0)))
 
@@ -814,6 +833,9 @@ NCPMGUI <- function () {
                          selected = character(0))
       updateRadioButtons(session,
                          'motor',
+                         selected = character(0))
+      updateRadioButtons(session,
+                         'system',
                          selected = character(0))
       updateRadioButtons(session,
                          'chunk',
@@ -854,6 +876,9 @@ NCPMGUI <- function () {
                          'motor',
                          selected = character(0))
       updateRadioButtons(session,
+                         'system',
+                         selected = character(0))
+      updateRadioButtons(session,
                          'chunk',
                          selected = character(0))
       v$current_selection <- c("")
@@ -884,7 +909,6 @@ NCPMGUI <- function () {
         reactableOutput("editTable")
       })
 
-
       data_filtered <- reactive({
         rv$edit
       })
@@ -897,7 +921,7 @@ NCPMGUI <- function () {
       updateNavlistPanel(session, "tabs", selected = "Edit a Scenario")
       # DW 9/8/21 Bring tabs back
       showTab(inputId = "tabs", target = "Results Summary")
-      showTab(inputId = "tabs", target = "See Novice vs. Expert")
+      showTab(inputId = "tabs", target = "Novice and Expert Comparison")
     })
 
     # rendering buttons
@@ -908,7 +932,7 @@ NCPMGUI <- function () {
     output$insert <- renderUI({
       actionButton(
         "insert",
-        label = "INSERT LINE"
+        label = "REPLACE LINE(S)"
       )
     })
 
@@ -929,8 +953,14 @@ NCPMGUI <- function () {
       table_selected <- reactive(getReactableState("editTable", "selected"))
       df[table_selected(),] <- input$newLine
       updateReactable("editTable", data = df)
-      rv$edit[rv$edit %in% df[table_selected(), "Code"],] <- input$newLine
+      # DW 2/9/22 - Intentionally added TWO SPACES before all replaced lines to be used for the calculation
+      rv$edit[rv$edit %in% df[table_selected(), "Code"],] <- paste("  ",input$newLine)
       rv$edit <- df
+
+      # DW 2/9/22 - For debugging
+      print("This is from INSERT")
+      print(input$newLine)
+      print(rv$edit)
     })
 
     final <- reactiveValues(code = data.frame(Code = numeric(0)))
@@ -941,7 +971,13 @@ NCPMGUI <- function () {
       })
       df <- data_filtered()
       table_selected <- reactive(getReactableState("editTable", "selected"))
+
+      # DW 2/9/22 - For debugging
+      print("This is from DELETE")
+      print(df[table_selected(),])
+
       df[table_selected(),] <- ""
+
       updateReactable("editTable", data = df)
       rv$edit[rv$edit %in% df[table_selected(), "Code"],] <- ""
       rv$edit <- df
@@ -1067,7 +1103,7 @@ NewOper <- function(op_name, op_time,oper_set_new){
   return(oper_set_new)
 }
 
-
+# For Novice
 #' NCPMcalc
 #'
 #' @param scenario scenario file
@@ -1087,6 +1123,7 @@ NCPMcalc <- function(scenario, time_library){
   return(ans)
 }
 
+# For Expert
 #' NCPMcalc_expert
 #'
 #' @param scenario scenario file

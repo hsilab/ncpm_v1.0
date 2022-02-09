@@ -35,8 +35,17 @@ RunMain <- function(scenario, time_library, skill) {
   TCT <- round(acc_Time_1/1000, 2)
 
   MC <- GetMemoryChunk(chunk_Lifecyle, acc_Time_1)
+  # JP - 2/9/22 (To make 0 chunk as NAN... This should go in mem.R)
+  if (MC[[2]] == 0)
+    MC[[2]]<-"NAN"
+  else
+    MC[[2]]<-round(MC[[2]], 2)
 
-  final_R <- list(wm_Box, TCT, MC[[1]], round(MC[[2]], 2), num_Oper)
+  # Added "floor" to throw out decimal points of perceptual operators generated due to NOVICE's repetitive perceptions
+  # final_R <- list(wm_Box, TCT, MC[[1]], round(MC[[2]], 2), floor(num_Oper))
+  final_R <- list(wm_Box, TCT, MC[[1]], MC[[2]], floor(num_Oper))
+
+
   return(final_R)
 }
 
