@@ -487,6 +487,8 @@ GetNumOper <- function (oper_Name, num_Oper, oper_Time, skill) {
     }
     else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") )
       num_Oper$Perceptual <- num_Oper$Perceptual + 1
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "speech") )
+      num_Oper$Perceptual <- num_Oper$Perceptual + 1
     else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "cognitive") )
       num_Oper$Congitive <- num_Oper$Congitive + 1
     else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "hands") )

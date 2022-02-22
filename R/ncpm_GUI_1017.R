@@ -69,7 +69,7 @@ NCPMGUI <- function () {
 
                fluidPage(
                  fluidRow(
-                   column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','custom'), selected = character(0))),
+                   column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','Say','custom'), selected = character(0))),
                    column(2,radioButtons('perceptual','Cognitive Operators', choices = c('Attend','Initiate','Ignore','Recall','Store','Think','Verify','custom'), selected = character(0))),
                    column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Reach','Flick','Zoom in','Zoom out','custom'), selected = character(0))),                   column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','custom'), selected = character(0))),
                     column(2, radioButtons('system','System',choices =c('Wait'), selected = character(0))),
@@ -503,7 +503,7 @@ NCPMGUI <- function () {
         v$op <- "custom"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
         # DW 10/16/21
-        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
           # DW 10/16/21 Grammar
@@ -543,6 +543,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Hear: Listen to someone speaking. Label should be the text of the speech")})
       }
+      else if (input$cognitive == 'Say')
+      {
+        output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
+      }
       else
       {
         output$Description <- renderText({paste("")})
@@ -566,7 +570,7 @@ NCPMGUI <- function () {
       {
         v$op <- "perceptual"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
-        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
         # DW 10/16/21
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
@@ -637,7 +641,7 @@ NCPMGUI <- function () {
       {
         v$op <- "motor"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
-        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator:")})
+        output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
         # DW 10/16/21
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
@@ -695,10 +699,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Write: Time to write a single word")})
       }
-      else if (input$motor == 'Say')
-      {
-        output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
-      }
+      # else if (input$motor == 'Say')
+      # {
+      #   output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
+      # }
       else if (input$motor == 'Wait')
       {
         output$Description <- renderText({paste("Wait: User waiting for system. Modify time by adding x seconds at end of line")})

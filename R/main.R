@@ -37,7 +37,7 @@ RunMain <- function(scenario, time_library, skill) {
   MC <- GetMemoryChunk(chunk_Lifecyle, acc_Time_1)
   # JP - 2/9/22 (To make 0 chunk as NAN... This should go in mem.R)
   if (MC[[2]] == 0)
-    MC[[2]]<-"NAN"
+    MC[[2]]<- 0
   else
     MC[[2]]<-round(MC[[2]], 2)
 
