@@ -163,10 +163,10 @@ NCPMGUI <- function () {
       tabPanel("Help", "Click on each tab for more information.",
                tabsetPanel(
                  tabPanel("Scenario Development", "The help page for developing scenarios goes here.", HTML("<br/>"),
-                          tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/hmv_GTk9vrw", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
+                          tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/qHGuHSaEoI8", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA),
                           ),
                  tabPanel("Scenario Edit", "The help page for editing a scenario goes here.", HTML("<br/>"),
-                          tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/N3vmOJEUawI", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA)
+                          tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/6mcy2GIQGRo", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA)
                           ),
                  tabPanel("Glossary", h2("Glossary"), # DW new
                           # DT::dataTableOutput("glossary"))
