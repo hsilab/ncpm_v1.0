@@ -152,7 +152,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set, nC) {
 
       # N-CPM : Novice Cognitive
       if ( (oper == "Think" | oper == "Recall" | oper == "Store" | oper == "Verify" | oper == "Decide") && (skill == "Novice") ) {
-        repetition <- sample(3:6, size=1) # Novice look & searching pattern
+        repetition <- sample(3:6, size=1) # Novice look & searching pattern.. .Kav ref
         for (i in 1:oper_set_line) {
           if (oper == oper_set[i, 2])
             matched_Time <- as.numeric(oper_set[i, 3])
