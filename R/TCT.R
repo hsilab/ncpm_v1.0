@@ -72,87 +72,195 @@ RetrOpTime_Motor <- function (oper, k) {
 #' @export
 #'
 #' @examples
-#' RetrievingOperTime(operator name, line number, scenario, skill)
-RetrievingOperTime <- function (oper, k, scenario, skill, oper_set) {
+#' RetrievingOperTime(operator name, line number, scenario, skill, oper_set, nC)
+RetrievingOperTime <- function (oper, k, scenario, skill, oper_set, nC) {
   oper_set_line <- nrow(oper_set)
-  # print("TCT")
-  # print(tail(oper_set))
 
   # bring operator time from the database
   matched_Time <- 0
   for (i in 1:oper_set_line) {
     if (oper == oper_set[i, 2])
-      matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 10062021
+      matched_Time <- as.numeric(oper_set[i, 3])
   }
 
-  # N-CPM : Novice Vision
-  if ( (oper == "Look" | oper == "Search") && (skill == "Novice") ) {
-    repetition <- sample(1:5, size=1) # Novice look & searching pattern
-    for (i in 1:oper_set_line) {
-      if (oper == oper_set[i, 2])
-        matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 10062021
+  if (nC < 2) {
+    # N-CPM : SRK-Skill level (Easy/simple task) - repetition in perception only
+    # N-CPM : Novice Cognitive
+    if ( (oper == "Think" | oper == "Recall" | oper == "Store") && (skill == "Novice") ) {
+      # repetition <- sample(1:2, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      # matched_Time <- repetition * matched_Time
     }
-    matched_Time <- repetition * matched_Time
+
+    # N-CPM : Novice Perceptual
+    if ( (oper == "Look" | oper == "Search" | oper == "Read" | oper == "Hear") && (skill == "Novice") ) {
+      repetition <- sample(1:2, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      matched_Time <- repetition * matched_Time
+    }
+
+    # N-CPM : Novice Motor
+    if ( (oper == "Touch" | oper == "Tap" | oper == "Reach" | oper == "Return" | oper == "Grasp" | oper == "Raise" | oper == "Release" | oper == "Return" | oper == "Type") && (skill == "Novice") ) {
+      # repetition was deactivated (commented) because the task in this category is so simple
+      # repetition <- sample(2:3, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      # matched_Time <- repetition * matched_Time
+    }
+  } else if (nC == 2) {
+    # N-CPM : SRK-Rule level (moderate task) - repetition for all
+
+    # N-CPM : Novice Cognitive
+    if ( (oper == "Think" | oper == "Recall" | oper == "Store") && (skill == "Novice") ) {
+      repetition <- sample(1:2, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      matched_Time <- repetition * matched_Time
+    }
+
+    # N-CPM : Novice Perceptual
+    if ( (oper == "Look" | oper == "Search" | oper == "Read" | oper == "Hear") && (skill == "Novice") ) {
+      repetition <- sample(1:2, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      matched_Time <- repetition * matched_Time
+    }
+
+    # N-CPM : Novice Motor
+    if ( (oper == "Touch" | oper == "Tap" | oper == "Reach" | oper == "Return" | oper == "Grasp" | oper == "Raise" | oper == "Release" | oper == "Return" | oper == "Type") && (skill == "Novice") ) {
+      repetition <- sample(1:2, size=1) # Novice look & searching pattern
+      for (i in 1:oper_set_line) {
+        if (oper == oper_set[i, 2])
+          matched_Time <- as.numeric(oper_set[i, 3])
+      }
+      matched_Time <- repetition * matched_Time
+    }
+  } else if (nC > 2) {
+      # N-CPM : SRK-Knowledge level (Hard/complex task) - more repetitions, especially for cognition
+
+      # N-CPM : Novice Cognitive
+      if ( (oper == "Think" | oper == "Recall" | oper == "Store" | oper == "Verify" | oper == "Decide") && (skill == "Novice") ) {
+        repetition <- sample(3:6, size=1) # Novice look & searching pattern
+        for (i in 1:oper_set_line) {
+          if (oper == oper_set[i, 2])
+            matched_Time <- as.numeric(oper_set[i, 3])
+        }
+        matched_Time <- repetition * matched_Time
+      }
+
+      # N-CPM : Novice Perceptual
+      if ( (oper == "Look" | oper == "Search" | oper == "Read" | oper == "Hear") && (skill == "Novice") ) {
+        repetition <- sample(2:3, size=1) # Novice look & searching pattern
+        for (i in 1:oper_set_line) {
+          if (oper == oper_set[i, 2])
+            matched_Time <- as.numeric(oper_set[i, 3])
+        }
+        matched_Time <- repetition * matched_Time
+      }
+
+      # N-CPM : Novice Motor
+      if ( (oper == "Touch" | oper == "Tap" | oper == "Reach" | oper == "Return" | oper == "Grasp" | oper == "Raise" | oper == "Release" | oper == "Return" | oper == "Type") && (skill == "Novice") ) {
+        repetition <- sample(2:3, size=1) # Novice look & searching pattern
+        for (i in 1:oper_set_line) {
+          if (oper == oper_set[i, 2])
+            matched_Time <- as.numeric(oper_set[i, 3])
+        }
+        matched_Time <- repetition * matched_Time
+      }
   }
 
-  # N-CPM : Novice Motor
-  if ( (oper == "Touch") && (skill == "Novice") ) {
-    RT <- 0 # Hick-Hyman law (Hick, 1952)
-    MT <- 0 # Fitts' law (Fitts, 1954)
-    nov_Chunk <- 1.9 # (Chase & Simon, 1973)
-
-    nov_dat_display <- 10 # number of items in the display for novices (all items)
-
-    icon_width <- 3
-    icon_distance <- 30
-
-    RT_nov <- 1/nov_Chunk * log2(nov_dat_display)
-    MT_nov <- 1/nov_Chunk * log2(2*nov_dat_display/icon_width) * 1000 # millisecond
-
-    matched_Time <- RT_nov + MT_nov # for novices
-  } else if ( (oper == "Touch") && (skill == "Expert") ) {
-    # N-CPM : Expert Motor
-    RT <- 0 # Hick-Hyman law (Hick, 1952)
-    MT <- 0 # Fitts' law (Fitts, 1954)
-    exp_Chunk <- 2.5 # (Chase & Simon, 1973)
-
-    exp_dat_display <- 2 # number of items in the display for experts (only essential information
-    icon_width <- 3
-    icon_distance <- 30
-
-    RT_exp <- 1/exp_Chunk * log2(exp_dat_display)
-    MT_exp <- 1/exp_Chunk * log2(2*exp_dat_display/icon_width) * 1000 # millisecond
-
-    matched_Time <- RT_exp + MT_exp # for experts
-  }
+  # Deprecated because there is overlap between CPM-GOMS and two laws...
+  # # N-CPM : Novice Motor
+  # if ( (oper == "Touch" | oper == "Tap") && (skill == "Novice") ) {
+  #   RT <- 0 # Hick-Hyman law (Hick, 1952)
+  #   MT <- 0 # Fitts' law (Fitts, 1954)
+  #   nov_Chunk <- 1.9 # (Chase & Simon, 1973)
+  #
+  #   nov_dat_display <- 10 # number of items in the display for novices (all items)
+  #
+  #   icon_width <- 3
+  #   icon_distance <- 30
+  #
+  #   RT_nov <- 1/nov_Chunk * log2(nov_dat_display)
+  #   # MT_nov <- 1/nov_Chunk * log2(2*nov_dat_display/icon_width) * 1000 # millisecond
+  #
+  #   matched_Time <- RT_nov # + MT_nov # for novices
+  #   repetition <- sample(1:3, size=1) # Kenny & Deshmukh, 2011
+  #   matched_Time <- matched_Time * repetition # Kenny & Deshmukh, 2011
+  #
+  # } else if ( (oper == "Touch") && (skill == "Expert") ) {
+  #   # N-CPM : Expert Motor
+  #   RT <- 0 # Hick-Hyman law (Hick, 1952)
+  #   MT <- 0 # Fitts' law (Fitts, 1954)
+  #   exp_Chunk <- 2.5 # (Chase & Simon, 1973)
+  #
+  #   exp_dat_display <- 2 # number of items in the display for experts (only essential information
+  #   icon_width <- 3
+  #   icon_distance <- 30
+  #
+  #   RT_exp <- 1/exp_Chunk * log2(exp_dat_display)
+  #   # MT_exp <- 1/exp_Chunk * log2(2*exp_dat_display/icon_width) * 1000 # millisecond
+  #
+  #   matched_Time <- RT_exp # + MT_exp # for experts
+  # } else if ( (oper == "Reach" | oper == "Return" | oper == "Grasp" | oper == "Raise" | oper == "Release") && (skill == "Novice") ) { # Kenny & Deshmukh, 2011
+  #   repetition <- sample(1:2, size=1) # Novice look & searching pattern
+  #   for (i in 1:oper_set_line) {
+  #     if (oper == oper_set[i, 2])
+  #       matched_Time <- as.numeric(oper_set[i, 3])
+  #   }
+  #   matched_Time <- repetition * matched_Time
+  # }
 
   # calculation time for hearing and saying : each word is 400 ms
   if (oper == "Hear" | oper == "Say") {
     num_Words <- strsplit(scenario[k, 1], " ")
     num_Words <- length(num_Words[[1]]) - 1
     matched_Time <- num_Words * 400
-  } else if (oper == "Type") {
-    dot_counter <- 0
-    for (i in 1:nchar(scenario[k,1])) {
-      c <- substr(scenario[k,1], i, i)
-      if (c == ".")
-        dot_counter <- dot_counter + 1
-    }
-    dot_counter
-    # 280=average type speed, 4 = number of characters in "type"
-    matched_Time <- (nchar(scenario[k,1]) - 4 - dot_counter) * 280
+    } else if (oper == "Type") {
+      dot_counter <- 0
+      for (i in 1:nchar(scenario[k,1])) {
+        c <- substr(scenario[k,1], i, i)
+        if (c == ".")
+          dot_counter <- dot_counter + 1
+      }
+      dot_counter
+      # 280=average type speed, 4 = number of characters in "type"
+      matched_Time <- (nchar(scenario[k,1]) - 4 - dot_counter) * 280
+    } else if (oper == "Tap") {
+      dot_counter <- 0
+      for (i in 1:nchar(scenario[k,1])) {
+        c <- substr(scenario[k,1], i, i)
+        if (c == ".")
+          dot_counter <- dot_counter + 1
+      }
+      dot_counter
+      # 450=average tap speed, 3 = number of characters in "type"
+      matched_Time <- (nchar(scenario[k,1]) - 3 - dot_counter) * 450
   }
 
-  # N-CPM : Novice "Read" involves more thingkings
-  if ( (oper == "Read") && (skill == "Novice") ) {
-    repetition <- sample(1:5, size=1) # Novice look & searching pattern
-    oper <- "Think"
-    for (i in 1:oper_set_line) {
-      if (oper == oper_set[i, 2])
-        matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 12052021
-    }
-    matched_Time <- repetition * matched_Time
-  }
+
+  # # N-CPM : Novice "Read" involves more thingkings
+  # if ( (oper == "Read") && (skill == "Novice") ) {
+  #   repetition <- sample(1:2, size=1) # Novice look & searching pattern
+  #   # oper <- "Think"
+  #   for (i in 1:oper_set_line) {
+  #     if (oper == oper_set[i, 2])
+  #       matched_Time <- as.numeric(oper_set[i, 3]) # Junho - 12052021
+  #   }
+  #   matched_Time <- repetition * matched_Time
+  # }
 
   return(matched_Time)
 }

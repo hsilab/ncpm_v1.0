@@ -29,7 +29,7 @@ oper_set <- rbind(oper_set , c("see","Proofread",as.numeric(330)))
 oper_set <- rbind(oper_set , c("see","Read",as.numeric(260)))
 oper_set <- rbind(oper_set , c("see","Search",as.numeric(1250)))
 oper_set <- rbind(oper_set , c("see","Saccade",as.numeric(30)))
-oper_set <- rbind(oper_set , c("hear","Hear",as.numeric(400)))
+oper_set <- rbind(oper_set , c("see","Hear",as.numeric(400)))
 oper_set <- rbind(oper_set , c("cognitive","Attend",as.numeric(50)))
 oper_set <- rbind(oper_set , c("cognitive","Cognitive_processor",as.numeric(70)))
 oper_set <- rbind(oper_set , c("cognitive","Initiate",as.numeric(50)))
@@ -39,6 +39,7 @@ oper_set <- rbind(oper_set , c("cognitive","Recall",as.numeric(550)))
 oper_set <- rbind(oper_set , c("cognitive","Store",as.numeric(50)))
 oper_set <- rbind(oper_set , c("cognitive","Think",as.numeric(1250)))
 oper_set <- rbind(oper_set , c("cognitive","Verify",as.numeric(1250)))
+oper_set <- rbind(oper_set , c("cognitive","Decide",as.numeric(50)))
 oper_set <- rbind(oper_set , c("hands","Click",as.numeric(320)))
 oper_set <- rbind(oper_set , c("hands","Drag",as.numeric(230)))
 oper_set <- rbind(oper_set , c("hands","Grasp",as.numeric(750)))
@@ -52,9 +53,9 @@ oper_set <- rbind(oper_set , c("hands","Touch",as.numeric(490)))
 oper_set <- rbind(oper_set , c("hands","Turn",as.numeric(800)))
 oper_set <- rbind(oper_set , c("hands","Type",as.numeric(280)))
 oper_set <- rbind(oper_set , c("hands","Write",as.numeric(2000)))
-oper_set <- rbind(oper_set , c("speech","Say",as.numeric(400)))
+oper_set <- rbind(oper_set , c("hands","Say",as.numeric(400)))
 oper_set <- rbind(oper_set , c("system","Wait",as.numeric(1000)))
-oper_set <- rbind(oper_set , c("hands","Reach",as.numeric(234)))
+oper_set <- rbind(oper_set , c("hands","Reach",as.numeric(795.6)))
 oper_set <- rbind(oper_set , c("hands","Flexion",as.numeric(209.5)))
 oper_set <- rbind(oper_set , c("hands","Extension",as.numeric(201.4)))
 oper_set <- rbind(oper_set , c("hands","Turn_MTM",as.numeric(306)))
@@ -69,6 +70,9 @@ oper_set <- rbind(oper_set , c("hands","Zoomout",as.numeric(506)))
 oper_set <- rbind(oper_set , c("hands","GLM_point",as.numeric(340)))
 oper_set <- rbind(oper_set , c("hands","Tap_dup",as.numeric(450)))
 oper_set <- rbind(oper_set , c("Foot","Kick",as.numeric(400)))
+oper_set <- rbind(oper_set , c("hands","Raise",as.numeric(1223)))
+oper_set <- rbind(oper_set , c("hands","Return",as.numeric(795.6)))
+oper_set <- rbind(oper_set , c("hands","Release",as.numeric(750)))
 oper_set <- oper_set[-1,]
 
 head(oper_set)
@@ -206,7 +210,7 @@ num_Oper <- data.frame(no_1, no_2, no_3)
 num_Oper <- rbind(num_Oper, c(0,0,0))
 
 colnames(num_Oper)[1]<-"Perceptual"
-colnames(num_Oper)[2]<-"Congitive"
+colnames(num_Oper)[2]<-"Cognitive" # It was congitive...
 colnames(num_Oper)[3]<-"Motor"
 
 #' Reset all variables

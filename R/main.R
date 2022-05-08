@@ -17,10 +17,23 @@ RunMain <- function(scenario, time_library, skill) {
   acc_Time_1 <- Reseted[[3]]
   acc_Time_2 <- Reseted[[4]]
   num_Oper <- ResetNumOp()
+  nC <- 0 # to save the number of cognitive operators for each run
+  nC_all <- 0 # to save the number of cognitive operators
 
+  # to get the difficulty of the task
+  for (i in 2:nrow(scenario)) {
+    nC <- TaskDiff(scenario[i, 1])
+    if (nC == 1) {
+      nC_all <- nC_all + 1
+    }
+  }
+
+  print(nC_all)
+
+  # main model run
   for (i in 2:nrow(scenario)) {
     oper_Name <- ExtOper(scenario[i, 1])
-    oper_Time <- RetrievingOperTime(oper_Name, i, scenario, skill, time_library)
+    oper_Time <- RetrievingOperTime(oper_Name, i, scenario, skill, time_library, nC_all)
     acc_Time_1 <- acc_Time_1 + as.numeric(oper_Time)
 
     num_of_chunks <- MultipleChunks(oper_Time, oper_Name, scenario[i, 1])
@@ -44,7 +57,6 @@ RunMain <- function(scenario, time_library, skill) {
   # Added "floor" to throw out decimal points of perceptual operators generated due to NOVICE's repetitive perceptions
   # final_R <- list(wm_Box, TCT, MC[[1]], round(MC[[2]], 2), floor(num_Oper))
   final_R <- list(wm_Box, TCT, MC[[1]], MC[[2]], floor(num_Oper))
-
 
   return(final_R)
 }

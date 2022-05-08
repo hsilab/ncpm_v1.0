@@ -485,16 +485,38 @@ GetNumOper <- function (oper_Name, num_Oper, oper_Time, skill) {
       total_P <- oper_Time/(as.numeric(oper_set[i,3]))
       num_Oper$Perceptual <- num_Oper$Perceptual + total_P
     }
-    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") )
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "see") ) {
       num_Oper$Perceptual <- num_Oper$Perceptual + 1
-    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "speech") )
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "speech") ) {
       num_Oper$Perceptual <- num_Oper$Perceptual + 1
-    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "cognitive") )
-      num_Oper$Congitive <- num_Oper$Congitive + 1
-    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "hands") )
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "cognitive") && (skill == "Novice") ) {
+      total_C <- oper_Time/(as.numeric(oper_set[i,3]))
+      # print(total_C)
+      num_Oper$Cognitive <- num_Oper$Cognitive + total_C
+      # print(num_Oper$Cognitive)
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "cognitive") ) {
+      num_Oper$Cognitive <- num_Oper$Cognitive + 1
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "hands") && (skill == "Novice") ) {
+      # total_M <- oper_Time/(as.numeric(oper_set[i,3]))
+      # num_Oper$Motor <- num_Oper$Motor + total_M
+      if (oper_Name != "Say") {
+        total_M <- oper_Time/(as.numeric(oper_set[i,3]))
+        num_Oper$Motor <- num_Oper$Motor + total_M
+      }
+      else if (oper_Name == "Say") {
+        num_Oper$Motor <- num_Oper$Motor + 1
+      }
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "hands") ) {
       num_Oper$Motor <- num_Oper$Motor + 1
-    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "Foot") )
+    }
+    else if ( (oper_Name == oper_set[i,2]) && (oper_set[i, 1] == "Foot") ) {
       num_Oper$Motor <- num_Oper$Motor + 1
+    }
   }
   return(num_Oper)
 }

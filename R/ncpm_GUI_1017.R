@@ -37,14 +37,7 @@ NCPMGUI <- function () {
                               column(12,
                                      fluidRow(
                                        column(6,
-                                              # CHANGE
-                                              # img(src="new_driver.PNG", height = 208, width = 312)), # not working
-                                              # showPNG()), # not working
-                                              # tags$img(height=100, width=100, src="http://www.rstudio.com/images/RStudio.2x.png")), # not working
-                                              # tags$img(height=208, width=312, src="https://cliparting.com/wp-content/uploads/2016/05/Cartoon-car-clip-art-free-vector-for-free-download-about-free.jpg")), # worked
                                               tags$img(height=208, width=312, src="https://static9.depositphotos.com/1074452/1184/i/600/depositphotos_11843259-stock-photo-novice-expert-keys-show-amateur.jpg")),
-                                              #tags$img(height=208, width=312, src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Car_pictogram.svg/1560px-Car_pictogram.svg.png")), # worked
-
                                        column(6)
                                      )
                               )
@@ -54,24 +47,22 @@ NCPMGUI <- function () {
     The purpose of this model is to
     predict novices' task performance and cognitive workload.
     Click on the help tab or upload a file to get started."),
-                   #Junho - 0827 - goal
-                   column(8,fileInput("dataset2", "Choose CSV File",
-                   # column(6,fileInput("dataset", "Choose CSV File", # This is for testing data. We can switch this to the build a scenario part at the end.
+                   column(8,fileInput("dataset2", "Choose CSV File", # This is for testing data. We can switch this to the build a scenario part at the end.
                                       accept = c(
                                         "text/csv",
                                         "text/comma-separated-values,text/plain",
                                         ".csv")
                    ),
-                   actionButton("uploaded","File uploaded?"))) # DW 9/8/21
+                   actionButton("uploaded","File uploaded?")))
                )
       ),
-      tabPanel("Develop a Scenario", # needs more cleaning up
+      tabPanel("Develop a Scenario",
 
                fluidPage(
                  fluidRow(
-                   column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','Say','custom'), selected = character(0))),
+                   column(2,radioButtons('cognitive','Perceptual Operators', choices = c('Look','Read','Search', 'Saccade','Hear','custom'), selected = character(0))),
                    column(2,radioButtons('perceptual','Cognitive Operators', choices = c('Attend','Initiate','Ignore','Recall','Store','Think','Verify','custom'), selected = character(0))),
-                   column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Reach','Flick','Zoom in','Zoom out','custom'), selected = character(0))),                   column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','custom'), selected = character(0))),
+                   column(2,radioButtons('motor','Motor Operators', choices = c('Drag','Grasp','Hands','Keystroke','Point','Swipe','Tap','Touch','Turn','Type','Write','Reach','Flick','Zoom in','Zoom out','Say', 'custom'), selected = character(0))),                   column(2,radioButtons('chunk', 'Chunks', choices = c('Plate Number','Street name','Road Name','custom'), selected = character(0))),
                     column(2, radioButtons('system','System',choices =c('Wait'), selected = character(0))),
                    column(2,tableOutput("Code")),
 
@@ -88,19 +79,15 @@ NCPMGUI <- function () {
                # the next part will only show up if custom chunk is chosen
                uiOutput("customtext"),
                uiOutput("custombutton"),
-               # end
+
                textInput("desc","Describe the use of the operator"),
                checkboxInput("parallel","Parallel?", FALSE),
                checkboxInput("goal","Add Goal?", FALSE),
                actionButton("add","Add new line to Code"),
                actionButton("same","Add to current line"),
                actionButton("reset","Remove current selections"),
-               actionButton("undo","Remove last line of code"), #make more robust
-               #            tableOutput("Code"), # should put this to the right of inputs deal with aesthetic last
+               actionButton("undo","Remove last line of code"),
                actionButton("moveedit","Move to editing"), # moves code to editing phase.
-               # downloadButton("downloadData", "Download")
-               # Disable "Work Done" 9/17/21 - Junho
-               # actionButton("dataset","Work Done")
       ),
       tabPanel("Novice and Expert Comparison",
                "The novice performance can be compared to",
@@ -110,9 +97,6 @@ NCPMGUI <- function () {
                  tabPanel("Task completion time", uiOutput("Table_tct")),
                  tabPanel("Memory chunks", uiOutput("Table_mem")),
                  tabPanel("Number of operators", uiOutput("Table_oper"))
-                 # tabPanel("Task completion time", tableOutput("Table_tct")),
-                 # tabPanel("Memory chunks", tableOutput("Table_mem")),
-                 # tabPanel("Number of operators", tableOutput("Table_oper"))
                )
 
       ),
@@ -169,8 +153,7 @@ NCPMGUI <- function () {
                           tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/6mcy2GIQGRo", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=NA)
                           ),
                  tabPanel("Glossary", h2("Glossary"), # DW new
-                          # DT::dataTableOutput("glossary"))
-                          shiny::dataTableOutput("glossary")) # Junho - 09252021
+                          shiny::dataTableOutput("glossary"))
                ))
     )
   )
@@ -202,118 +185,73 @@ NCPMGUI <- function () {
     observeEvent(input$uploaded,{
       showTab(inputId = "tabs", target = "Results Summary")
       showTab(inputId = "tabs", target = "Novice and Expert Comparison")
-
     })
 
-    # Task completion time
-    timeInput <- reactive({
+    ###############################################################################################################
+    # RESULTS START FROM HERE #####################################################################################
+    ###############################################################################################################
+
+    # Task completion time (TCT)
+    # Global input for novices
+    GlobalInput <- reactive({
 
       inFile <- input$dataset2
-      #print(inFile)
-      #print(inFile$datapath)
 
       if(is.null(inFile))
       {
         data <- as.data.frame(v$code, header=FALSE)
-        # nov_TCT
       }
       else
       {
-        data <- read.csv(inFile$datapath, header = TRUE)
+        data <- read.csv(inFile$datapath, header = FALSE)
       }
 
-      #data <- NCPMcalc(data)
-      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       if(is.null(input$confirmop))
         data <- NCPMcalc(data, oper_set)
       else
         data <- NCPMcalc(data, oper_set_shiny)
 
-      # Junho - 2/9/22
-      print(data)
+      data
 
-      data[[2]]
+    })
+    # Global input for experts
+    GlobalInput_exp <- reactive({
+
+      inFile <- input$dataset2
+
+      if(is.null(inFile))
+      {
+        data <- as.data.frame(v$code, header=FALSE)
+      }
+      else
+      {
+        data <- read.csv(inFile$datapath, header = FALSE)
+      }
+      if(is.null(input$confirmop))
+        data <- NCPMcalc_exp(data, oper_set)
+      else
+        data <- NCPMcalc_exp(data, oper_set_shiny)
+
+      data
 
     })
     output$Time <- renderText({
-      timeInput()
-    })
-
-    # Memory chunks
-    loadInput <- reactive({
-
-      inFile <- input$dataset2
-
-      if(is.null(inFile))
-        data<-as.data.frame(v$code, header=FALSE)
-      else
-        data <- read.csv(inFile$datapath, header = TRUE)
-
-      #data <- NCPMcalc(data)
-      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
-      if(is.null(input$confirmop))
-        data <- NCPMcalc(data, oper_set)
-      else
-        data <- NCPMcalc(data, oper_set_shiny)
-      data[[4]]
-
+      GlobalInput()[[2]]
     })
     output$Load <- renderText({
-      loadInput()
-    })
-
-    # Number of operators
-    opInput <- reactive({
-
-      inFile <- input$dataset2
-
-      if(is.null(inFile))
-        data<-as.data.frame(v$code, header=FALSE)
-      else
-        data <- read.csv(inFile$datapath, header = TRUE)
-
-      #data <- NCPMcalc(data)
-      #data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
-      if(is.null(input$confirmop))
-        data <- NCPMcalc(data, oper_set)
-      else
-        data <- NCPMcalc(data, oper_set_shiny)
-      data[[5]]
+      GlobalInput()[[4]]
     })
     output$Perc <- renderText({
-      opInput()[[1]]
-      # Junho - 2/9/22
-      print(opInput()[[1]])
-    })
+      GlobalInput()[[5]][[1]]
+     })
     output$Cog <- renderText({
-      opInput()[[2]]
-      # Junho - 2/9/22
-      print(opInput()[[2]])
+      GlobalInput()[[5]][[2]]
     })
     output$Motor <- renderText({
-      opInput()[[3]]
-      # Junho - 2/9/22
-      print(opInput()[[3]])
-    })
-
-    # Chunk structure
-    datasetInput <- reactive({
-
-      inFile <- input$dataset2
-
-      if(is.null(inFile))
-        data<-as.data.frame(v$code, header=FALSE)
-      else
-        data <- read.csv(inFile$datapath, header = TRUE)
-
-      #data <- NCPMcalc(data)
-      data <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
-      data <- data[[1]]
-      data <- dplyr::select(data, -Stack_Depth, -Activation )
-      data
+      GlobalInput()[[5]][[3]]
     })
     output$contents <- renderTable({
-      datasetInput()
+      GlobalInput()[[1]]
     })
 
     ############################
@@ -327,17 +265,12 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       if(is.null(input$confirmop))
-        data_nov <- NCPMcalc(data, oper_set)
+        data_nov <- GlobalInput()
       else
-        data_nov <- NCPMcalc(data, oper_set_shiny)
-      data_nov[[2]]
-      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
-      if(is.null(input$confirmop))
-        data_exp <- NCPMcalc_exp(data, oper_set)
-      else
-        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
+        data_nov <- GlobalInput()
+
+      data_exp <- GlobalInput_exp()
       data_exp[[2]]
 
       a<-c()
@@ -354,7 +287,7 @@ NCPMGUI <- function () {
       tableTCT
     }, rownames = TRUE)
 
-    # Nov vs. Exp - MEM - DATA TABLE
+    # Nov vs. Exp - Memory load - DATA TABLE
     output$Table_mem <- renderTable({
 
       inFile <- input$dataset2
@@ -364,17 +297,13 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       if(is.null(input$confirmop))
-        data_nov <- NCPMcalc(data, oper_set)
+        data_nov <- GlobalInput()
       else
-        data_nov <- NCPMcalc(data, oper_set_shiny)
+        data_nov <- GlobalInput()
       data_nov[[4]]
-      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
-      if(is.null(input$confirmop))
-        data_exp <- NCPMcalc_exp(data, oper_set)
-      else
-        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
+
+      data_exp <- GlobalInput_exp()
       data_exp[[4]]
 
       a<-c()
@@ -391,7 +320,7 @@ NCPMGUI <- function () {
       tableTCT
     }, rownames = TRUE)
 
-    # Nov vs. Exp - Oper - DATA TABLE
+    # Nov vs. Exp - Number of Operators - DATA TABLE
     output$Table_oper <- renderTable({
 
       inFile <- input$dataset2
@@ -401,17 +330,13 @@ NCPMGUI <- function () {
       else
         data <- read.csv(inFile$datapath, header = TRUE)
 
-      # data_nov <- ifelse(oper_set_shiny != 0, NCPMcalc(data, oper_set_shiny), NCPMcalc(data, oper_set))
       if(is.null(input$confirmop))
-        data_nov <- NCPMcalc(data, oper_set)
+        data_nov <- GlobalInput()
       else
-        data_nov <- NCPMcalc(data, oper_set_shiny)
+        data_nov <- GlobalInput()
       data_nov[[5]]
-      # data_exp <- ifelse(oper_set_shiny != 0, NCPMcalc_exp(data, oper_set_shiny), NCPMcalc_exp(data, oper_set))
-      if(is.null(input$confirmop))
-        data_exp <- NCPMcalc_exp(data, oper_set)
-      else
-        data_exp <- NCPMcalc_exp(data, oper_set_shiny)
+
+      data_exp <- GlobalInput_exp()
       data_exp[[5]]
 
       a<-c()
@@ -433,7 +358,13 @@ NCPMGUI <- function () {
 
     }, rownames=TRUE)
 
+    ###############################################################################################################
+    # RESULTS END HERE ############################################################################################
+    ###############################################################################################################
 
+    ###########################################################################################################################
+    # DEVELOP A SCENARIO STARTS FROM HERE #####################################################################################
+    ###########################################################################################################################
 
     ############################
     # DEVELOP A SCENARIO
@@ -502,11 +433,10 @@ NCPMGUI <- function () {
       {
         v$op <- "custom"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
-        # DW 10/16/21
+
         output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
-          # DW 10/16/21 Grammar
         })
 
       }
@@ -515,13 +445,9 @@ NCPMGUI <- function () {
         output$customop <- renderUI({NULL})
         output$custombuttonop <- renderUI({NULL})
         v$op <- ""
-        # DW 10/16/21
+
         output$customtimeop <- renderUI({NULL})
       }
-
-      # JP 10/17/21
-      # print(output$customop)
-      # print(output$customtimeop)
 
       if (input$cognitive == 'Look')
       {
@@ -543,10 +469,10 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Hear: Listen to someone speaking. Label should be the text of the speech")})
       }
-      else if (input$cognitive == 'Say')
-      {
-        output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
-      }
+      # else if (input$cognitive == 'Say')
+      # {
+      #   output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
+      # }
       else
       {
         output$Description <- renderText({paste("")})
@@ -571,10 +497,9 @@ NCPMGUI <- function () {
         v$op <- "perceptual"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
         output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
-        # DW 10/16/21
+
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
-          # DW 10/16/21 Grammar
         })
       }
       else
@@ -584,7 +509,6 @@ NCPMGUI <- function () {
         output$custombuttonop <- renderUI({NULL})
         v$op <- ""
         output$customtimeop <- renderUI({NULL})
-        # DW 10/16/21
       }
       if(input$perceptual == 'Attend')
       {
@@ -642,7 +566,7 @@ NCPMGUI <- function () {
         v$op <- "motor"
         output$customop <- renderUI({ textInput("customtextop", "Input the operator:")})
         output$customtimeop <- renderUI({ textInput("customtimeop", "Input time to complete operator (ms):")})
-        # DW 10/16/21
+
         output$custombuttonop <- renderUI ({
           actionButton("confirmop", label = "Confirm Custom Operator")
         })
@@ -653,7 +577,6 @@ NCPMGUI <- function () {
         output$custombuttonop <- renderUI({NULL})
         v$op <- ""
         output$customtimeop <- renderUI({NULL})
-        # DW 10/16/21
       }
       if (input$motor == 'Drag')
       {
@@ -699,10 +622,6 @@ NCPMGUI <- function () {
       {
         output$Description <- renderText({paste("Write: Time to write a single word")})
       }
-      # else if (input$motor == 'Say')
-      # {
-      #   output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
-      # }
       else if (input$motor == 'Wait')
       {
         output$Description <- renderText({paste("Wait: User waiting for system. Modify time by adding x seconds at end of line")})
@@ -722,6 +641,10 @@ NCPMGUI <- function () {
       else if (input$motor == 'Zoom out')
       {
         output$Description <- renderText({paste("Zoom out: Zoom out from the screen")})
+      }
+      else if (input$motor == 'Say')
+      {
+        output$Description <- renderText({paste("Say: Speech. Label should be the text of speech")})
       }
       else
       {
@@ -762,18 +685,10 @@ NCPMGUI <- function () {
         write.csv(codelines$df, file, row.names = FALSE)
       }
     )
-#DW 10/16/21 Pretty sure this is redundant
-     #   observeEvent(input$custom,{
-  #    output$Description <- renderText({ paste("Descriptions go here")})
-      #need to insert a very long if statement here, get it all from Junho.
-  #  }
-  #  )
 
     # initial reactive value
     codelines <- reactiveValues()
     codelines$df <- data.frame(Code = numeric(0))
-
-
 
     newEntry <- observe({
       if(input$add > 0) {
@@ -813,7 +728,7 @@ NCPMGUI <- function () {
       }
     })
 
-    # Junho - 0827
+    # Keeping updated the developed scenario
     observeEvent(input$dataset,{
        v$code <- codelines$df
     })
@@ -848,9 +763,7 @@ NCPMGUI <- function () {
       isolate(codelines$df[nrow(codelines$df),] <- c(paste(codelines$df[nrow(codelines$df),],v$goal,v$parallel,v$current_selection,v$chunk,input$desc)))
       v$current_selection <- c("")
       v$chunk <- c("")
-      # output$result <- c("")
-      # output$chunkresult <- c("")
-      # output$Description <- c("")
+
       output$result <- renderText({ # DW 9/11/21 Bug fix
         paste("")
       })
@@ -887,9 +800,7 @@ NCPMGUI <- function () {
                          selected = character(0))
       v$current_selection <- c("")
       v$chunk <- c("")
-      # output$result <- c("")
-      # output$chunkresult <- c("")
-      # output$Description <- c("")
+
       output$result <- renderText({ # DW 9/11/21 Bug fix
         paste("")
       })
@@ -899,10 +810,18 @@ NCPMGUI <- function () {
       output$Description <- renderText({
         paste("")
       })
-
     })
 
+    # Shows the progress of developed scenario on the right side of "Develop a Scneario" page
     output$Code <- renderTable({codelines$df})
+
+    ###########################################################################################################################
+    # DEVELOP A SCENARIO ENDS HERE ############################################################################################
+    ###########################################################################################################################
+
+    ###########################################################################################################################
+    # EDIT A SCENARIO STARTS FROM HERE ########################################################################################
+    ###########################################################################################################################
 
     #############################
     # EDIT A SCENARIO
@@ -947,8 +866,7 @@ NCPMGUI <- function () {
       )
     })
 
-    # note that this has to be a separate process from building.
-
+    # Note that this has to be a separate process from building.
     observeEvent(input$insert,{
       data_filtered <- reactive({
         rv$edit
@@ -960,11 +878,6 @@ NCPMGUI <- function () {
       # DW 2/9/22 - Intentionally added TWO SPACES before all replaced lines to be used for the calculation
       rv$edit[rv$edit %in% df[table_selected(), "Code"],] <- paste("  ",input$newLine)
       rv$edit <- df
-
-      # DW 2/9/22 - For debugging
-      print("This is from INSERT")
-      print(input$newLine)
-      print(rv$edit)
     })
 
     final <- reactiveValues(code = data.frame(Code = numeric(0)))
@@ -976,26 +889,21 @@ NCPMGUI <- function () {
       df <- data_filtered()
       table_selected <- reactive(getReactableState("editTable", "selected"))
 
-      # DW 2/9/22 - For debugging
-      print("This is from DELETE")
-      print(df[table_selected(),])
-
       df[table_selected(),] <- ""
 
       updateReactable("editTable", data = df)
       rv$edit[rv$edit %in% df[table_selected(), "Code"],] <- ""
       rv$edit <- df
     })
-    observeEvent(input$done,{ # IT WORKS WOW
+    observeEvent(input$done,{ # IT WORKS WOW !!!
       final$code <- subset(rv$edit, Code != "")
       rv$edit <- final$code
-      v$code <- rv$edit # DW 9/11/21
+      v$code <- rv$edit
       output$load <- renderUI({
         downloadButton(
           "Download", "Download Data"
         )
       })
-
     })
 
     output$Download <- downloadHandler( # Now in editing side
@@ -1006,6 +914,8 @@ NCPMGUI <- function () {
         write.csv(rv$edit, file, row.names = FALSE)
       }
     )
+
+    # downloads the code into a csv if you click the download button
     observeEvent(input$Download,{
       v$code <- function(file) {
         write.csv(rv$edit, file, row.names = FALSE)
@@ -1013,19 +923,13 @@ NCPMGUI <- function () {
     })
 
     # NEW LOCATION OF JUNHO VARIABLE
-    v$code <- function(file) {
-      write.csv(rv$edit, file, row.names = FALSE)
-    }
+    # The code breaks if you don't include this but I don't remember how it works?
+    # v$code <- function(file) {
+    #   write.csv(rv$edit, file, row.names = FALSE)
+    # }
 
-    # observeEvent(input$confirmop,{
-    #   v$current_selection <- input$customop
-    #   test_time <- input$customtimeop
-    #   test_opname <- input$customtextop
-    #   print(test_time)
-    #   print(test_opname)
-    # })
+    # These are for custom operators
     oper_set_new <- reactiveValues()
-    # oper_set_new$c <- data.frame(Code=numeric(0),Category_1 = numeric(0),Category_2= numeric(0),TCT = numeric(0))
     oper_set_new$c <- data.frame(Code=numeric(0))
 
     observeEvent(input$confirmop,{
@@ -1033,18 +937,10 @@ NCPMGUI <- function () {
 
       test_time <- input$customtimeop
       test_opname <- input$customtextop
-      # print(test_time)
-      # print(test_opname)
-
-      # oper_set <- rbind(oper_set , c("Custom", test_opname, as.numeric(test_time)))
-      # newLine <- isolate()
-      # isolate(oper_set[nrow(oper_set)+1,] <- c("Custom", test_opname, as.numeric(test_time)))
 
       oper_set_new$c <- NewOper(test_opname, test_time, oper_set_new$c)
-      # print(tail(oper_set_new$c))
 
       oper_set <- rbind(oper_set, oper_set_new$c)
-      # print(tail(oper_set))
 
       oper_set_shiny <<- oper_set
 
@@ -1054,35 +950,18 @@ NCPMGUI <- function () {
 
     })
 
-    # DW 9/8/21 deleted old novice vs expert stuff.
+    ###########################################################################################################################
+    # EDIT A SCENARIO ENDS HERE ###############################################################################################
+    ###########################################################################################################################
 
     ############################################
     # HELP
-
-    # DW New
-    # gloss <- fread("C:/Users/david/Documents/Research/NSF-CAREER/GlossaryGUI.csv") # David
-    # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho
-    # gloss <- fread("./data/inst/extdata/GlossaryGUI_JP.csv") # Junho
-    # gloss <- fread("./inst/extdata/GlossaryGUI_JP.csv") # Junho - new data path 09252021
-    # gloss <- fread("./extdata/GlossaryGUI_JP.csv") # Junho - new data path 09262021
-    # gloss <- fread("./data/GlossaryGUI_JP.csv") # Junho - new data path 09252021
-    # gloss <- read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021
-    # gloss <- fread("D:/JP_project_test/ncpm/data/GlossaryGUI_JP.csv") # Junho
-
-    output$glossary = shiny::renderDataTable({ # Junho - 09252021
-    # output$glossary = DT::renderDataTable({
+    output$glossary = shiny::renderDataTable({
       glossaryGUI
-    # fread("./inst/extdata/GlossaryGUI_JP.csv")
-    # fread("./extdata/GlossaryGUI_JP.csv")
-    # fread("./data/inst/extdata/GlossaryGUI_JP.csv")
-    # read.csv(file = "./data/GlossaryGUI_JP.csv", header=TRUE) # Junho - new data path 09252021
     })
-
   })
-
   shinyApp(ui, server)
 }
-
 
 #' NewOper
 #'
@@ -1097,8 +976,6 @@ NCPMGUI <- function () {
 NewOper <- function(op_name, op_time,oper_set_new){
 
   oper_set_new <- rbind(oper_set_new , c("Custom", op_name, as.numeric(op_time)))
-
-  # oper_set_new <- oper_set
 
   colnames(oper_set_new)[1]<-"Category_1"
   colnames(oper_set_new)[2]<-"Category_2"
@@ -1121,8 +998,6 @@ NewOper <- function(op_name, op_time,oper_set_new){
 NCPMcalc <- function(scenario, time_library){
 
   ans = RunMain(scenario, time_library, "Novice")
-  # print("NCPMcalc")
-  # print(tail(time_library))
 
   return(ans)
 }
