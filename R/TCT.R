@@ -84,7 +84,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set, nC) {
   }
 
   if (nC < 2) {
-    # N-CPM : SRK-Skill level (Easy/simple task) - repetition in perception only
+    # N-CPM : SRK-Skill level (Easy/simple task) - repetition in perception only!
     # N-CPM : Novice Cognitive
     if ( (oper == "Think" | oper == "Recall" | oper == "Store") && (skill == "Novice") ) {
       # repetition <- sample(1:2, size=1) # Novice look & searching pattern
