@@ -116,7 +116,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set, nC) {
       # matched_Time <- repetition * matched_Time
     }
   } else if (nC == 2) {
-    # N-CPM : SRK-Rule level (moderate task) - repetition for all!
+    # N-CPM : SRK-Rule level (moderate task) - repetition for all!!
 
     # N-CPM : Novice Cognitive
     if ( (oper == "Think" | oper == "Recall" | oper == "Store") && (skill == "Novice") ) {
@@ -148,7 +148,7 @@ RetrievingOperTime <- function (oper, k, scenario, skill, oper_set, nC) {
       matched_Time <- repetition * matched_Time
     }
   } else if (nC > 2) {
-      # N-CPM : SRK-Knowledge level (Hard/complex task) - more repetitions, especially for cognition!
+      # N-CPM : SRK-Knowledge level (Hard/complex task) - more repetitions, especially for cognition!!
 
       # N-CPM : Novice Cognitive
       if ( (oper == "Think" | oper == "Recall" | oper == "Store" | oper == "Verify" | oper == "Decide") && (skill == "Novice") ) {
